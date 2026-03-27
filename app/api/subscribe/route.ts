@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 const TELEMETRY_BASE_URL = "https://hooks.pointline.dev";
 const TELEMETRY_TOKEN = "3423ec18-518e-420c-aa6e-09aea84ebde3";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { email, name } = body;
@@ -12,12 +12,12 @@ export async function POST(request: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       return NextResponse.json(
-        { success: false, message: "Please provide a valid email address." },
+        { success: false, message: "Please enter a valid email address." },
         { status: 400 }
       );
     }
 
-    // Send waitlist signup event to telemetry
+    // Log the signup to telemetry (non-blocking)
     await fetch(`${TELEMETRY_BASE_URL}/api/telemetry/event`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,14 +31,16 @@ export async function POST(request: NextRequest) {
           timestamp: new Date().toISOString(),
         },
       }),
-    }).catch(() => null); // Non-blocking
+    }).catch(() => null);
+
+    console.log(`[WAITLIST SIGNUP] Email: ${email}, Name: ${name || "N/A"}`);
 
     return NextResponse.json({
       success: true,
-      message: "You're on the waitlist! We'll notify you when InvoiceNudge launches.",
+      message: "You're on the waitlist! We'll email you when beta access opens.",
     });
   } catch (error) {
-    console.error("Subscription error:", error);
+    console.error("[SUBSCRIBE ERROR]", error);
     return NextResponse.json(
       { success: false, message: "Something went wrong. Please try again." },
       { status: 500 }
