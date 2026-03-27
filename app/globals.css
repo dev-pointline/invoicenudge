@@ -1,27 +1,38 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg: #FFFBF5;
-  --color-text: #1a1a2e;
-  --color-primary: #6366F1;
-  --color-secondary: #F97316;
-  --color-accent: #10B981;
-  --color-muted: #64748B;
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
+  
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-}
-
-@keyframes fadeInUp {
+@keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -29,75 +40,39 @@ body {
   }
 }
 
-@keyframes slideInLeft {
+@keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateX(-30px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
   }
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
+  animation: fade-in-up 0.6s ease-out forwards;
 }
 
-.animate-slide-in-left {
-  animation: slideInLeft 0.6s ease-out forwards;
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
 }
 
-.animate-slide-in-right {
-  animation: slideInRight 0.6s ease-out forwards;
+.animation-delay-100 {
+  animation-delay: 0.1s;
 }
 
-.animate-pulse-subtle {
-  animation: pulse 2s ease-in-out infinite;
+.animation-delay-200 {
+  animation-delay: 0.2s;
 }
 
-.animation-delay-100 { animation-delay: 100ms; }
-.animation-delay-200 { animation-delay: 200ms; }
-.animation-delay-300 { animation-delay: 300ms; }
-.animation-delay-400 { animation-delay: 400ms; }
-.animation-delay-500 { animation-delay: 500ms; }
-.animation-delay-600 { animation-delay: 600ms; }
-
-.gradient-text {
-  background: linear-gradient(135deg, #6366F1 0%, #F97316 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.animation-delay-300 {
+  animation-delay: 0.3s;
 }
 
-.hero-gradient {
-  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5a 50%, #4a3f6b 100%);
+.animation-delay-400 {
+  animation-delay: 0.4s;
 }
 
-.card-shadow {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.card-shadow-lg {
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+.animation-delay-500 {
+  animation-delay: 0.5s;
 }
