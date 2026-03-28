@@ -4,20 +4,20 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "InvoiceNudge — Stop Chasing Late Payments | AI Payment Reminders",
-  description: "Forward your invoice. We handle the follow-ups. Get paid 14 days faster with AI-powered payment reminders that sound like you. Join the waitlist.",
-  keywords: ["invoice reminders", "freelancer payments", "automated follow-ups", "payment automation", "late payment solution"],
+  title: "InvoiceNudge — AI Payment Reminders for Freelancers",
+  description: "Stop chasing late payments. AI-powered reminders that sound like you. Forward your invoice, we handle the follow-ups. Join the waitlist.",
+  keywords: ["invoice reminders", "freelancer tools", "payment automation", "AI invoicing", "late payment solution"],
   openGraph: {
     title: "InvoiceNudge — Stop Chasing Late Payments",
-    description: "Forward your invoice. We handle the follow-ups. Get paid 14 days faster with AI-powered payment reminders.",
+    description: "AI-powered payment reminders that sound like you, not a robot. Built for freelancers who hate awkward follow-ups.",
     type: "website",
-    url: "https://invoicenudge.com",
+    url: "https://invoicenudge.pointline.dev",
     siteName: "InvoiceNudge",
   },
   twitter: {
     card: "summary_large_image",
-    title: "InvoiceNudge — Stop Chasing Late Payments",
-    description: "Forward your invoice. We handle the follow-ups. Get paid 14 days faster.",
+    title: "InvoiceNudge — AI Payment Reminders",
+    description: "Stop chasing late payments. AI reminders that match your tone.",
   },
   robots: {
     index: true,
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
@@ -42,7 +42,11 @@ export default function RootLayout({
               "@type": "Organization",
               name: "InvoiceNudge",
               description: "AI-powered payment reminders for freelancers",
-              url: "https://invoicenudge.com",
+              url: "https://invoicenudge.pointline.dev",
+              founder: {
+                "@type": "Person",
+                name: "Dor Tagger",
+              },
             }),
           }}
         />
@@ -55,26 +59,26 @@ export default function RootLayout({
               mainEntity: [
                 {
                   "@type": "Question",
+                  name: "How does InvoiceNudge learn my tone?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "We analyze your original invoice email: sentence length, formality level, emoji usage, greeting style. The AI mirrors your communication style in every reminder.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What if the AI writes something wrong?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Preview Mode shows you every email before it sends. You can edit, reject, or approve. You're never forced into autopilot.",
+                  },
+                },
+                {
+                  "@type": "Question",
                   name: "When does InvoiceNudge launch?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "We're targeting launch within 8-12 weeks. Join the waitlist to be notified the moment we're live.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Will my clients know I'm using an automation tool?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "No. Emails come from your email address and match your communication style. There's no visible branding.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Do I need to connect my accounting software?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "No. Just forward your invoice emails. No QuickBooks, Xero, or FreshBooks integration required.",
+                    text: "We're targeting Q2 2026. Join the waitlist to lock in founding member pricing.",
                   },
                 },
               ],
@@ -82,9 +86,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased bg-white text-slate-900">
-        {children}
-              <script defer src="/pipeline-telemetry.js" data-telemetry-token="2de4b11a-bf6e-4b73-8fdf-d923e6f59110" data-telemetry-base-url="https://hooks.pointline.dev"></script>
+      <body className="font-sans antialiased">{children}        <script defer src="/pipeline-telemetry.js" data-telemetry-token="e6e92304-2700-4515-bca7-1df346aac2e5" data-telemetry-base-url="https://hooks.pointline.dev"></script>
       </body>
     </html>
   );
