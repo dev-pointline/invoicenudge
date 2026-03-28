@@ -1,1 +1,6 @@
-SEE_POSTCSS_CONFIG_ABOVE
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+export default config;

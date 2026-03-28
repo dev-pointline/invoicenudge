@@ -1,1 +1,3 @@
-SEE_NEXT_CONFIG_ABOVE
+import type { NextConfig } from "next";
+const nextConfig: NextConfig = {};
+export default nextConfig;
