@@ -1,58 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const TELEMETRY_BASE_URL = "https://hooks.pointline.dev";
-const TELEMETRY_TOKEN = "3423ec18-518e-420c-aa6e-09aea84ebde3";
-
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
+const TELEMETRY_TOKEN = "invoicenudge_validation_2026";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, name } = body;
 
-    if (!email) {
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
       return NextResponse.json(
-        { success: false, message: "Email is required" },
+        { error: "Please enter a valid email address" },
         { status: 400 }
       );
     }
 
-    if (!isValidEmail(email)) {
-      return NextResponse.json(
-        { success: false, message: "Please enter a valid email address" },
-        { status: 400 }
-      );
-    }
+    // Log the signup to console for debugging
+    console.log(`[Waitlist Signup] Email: ${email}, Name: ${name || "N/A"}`);
 
-    // Store the signup via telemetry
-    await fetch(`${TELEMETRY_BASE_URL}/api/telemetry/event`, {
+    // Send telemetry event (non-blocking)
+    fetch(`${TELEMETRY_BASE_URL}/api/telemetry/event`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         telemetryToken: TELEMETRY_TOKEN,
         eventType: "waitlist_signup",
-        metadata: { 
-          email, 
-          name: name || null, 
+        metadata: {
+          email,
+          name: name || null,
           source: "landing_page",
           timestamp: new Date().toISOString(),
         },
       }),
-    }).catch(() => null); // non-blocking
-
-    console.log(`[InvoiceNudge] New waitlist signup: ${email}`);
+    }).catch((err) => {
+      console.error("[Telemetry Error]", err);
+    });
 
     return NextResponse.json({
       success: true,
-      message: "You're on the waitlist! We'll email you when InvoiceNudge is ready.",
+      message: "You're on the waitlist! We'll email you when it's your turn.",
     });
   } catch (error) {
-    console.error("[InvoiceNudge] Subscribe error:", error);
+    console.error("[Subscribe Error]", error);
     return NextResponse.json(
-      { success: false, message: "Something went wrong. Please try again." },
+      { error: "Something went wrong. Please try again." },
       { status: 500 }
     );
   }

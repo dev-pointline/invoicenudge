@@ -4,74 +4,22 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "InvoiceNudge — AI Payment Reminders for Freelancers",
-  description: "Stop chasing late payments. InvoiceNudge sends AI-powered, personalized invoice reminders in your voice. Get paid 16 days faster on average. First 100 invoices free.",
-  keywords: ["invoice reminder", "freelance payment", "late payment", "AI invoice", "get paid faster", "payment follow-up", "freelancer tools"],
+  title: "InvoiceNudge — Stop Chasing Late Payments",
+  description: "AI-powered payment reminders that sound like you. Forward your invoice, get paid 14 days faster. Join the waitlist for early access.",
+  keywords: ["invoice reminders", "freelancer payments", "late payment automation", "AI invoice follow-up", "payment collection"],
   openGraph: {
-    title: "Stop Writing 'Just Checking In' Emails — InvoiceNudge",
-    description: "AI sends polite payment reminders in your voice so you get paid faster. Join 500 freelancers on the waitlist.",
+    title: "InvoiceNudge — Stop Chasing Late Payments",
+    description: "AI-powered payment reminders that sound like you. Forward your invoice, get paid 14 days faster.",
     type: "website",
     url: "https://invoicenudge.com",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "InvoiceNudge - AI Payment Reminders",
-      },
-    ],
+    siteName: "InvoiceNudge",
   },
   twitter: {
     card: "summary_large_image",
-    title: "InvoiceNudge — Get Paid 16 Days Faster",
-    description: "AI-powered payment reminders that sound like you. First 100 invoices free.",
+    title: "InvoiceNudge — Stop Chasing Late Payments",
+    description: "AI-powered payment reminders that sound like you. Forward your invoice, get paid 14 days faster.",
   },
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "InvoiceNudge",
-  description: "AI-powered payment reminders for freelancers",
-  url: "https://invoicenudge.com",
-  logo: "https://invoicenudge.com/logo.png",
-  sameAs: [
-    "https://twitter.com/invoicenudge",
-    "https://www.producthunt.com/posts/invoicenudge"
-  ],
-};
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "How does InvoiceNudge know when to send reminders?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "When you forward an invoice email, our AI extracts the due date and client email automatically. Reminders are scheduled for Day 0, Day 3, Day 7, Day 14, and Day 21."
-      }
-    },
-    {
-      "@type": "Question",
-      name: "Will my clients know I'm using automation?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "No. Reminders are sent from your email address via our authenticated sending, not from @invoicenudge.com. To your client, it looks exactly like you personally wrote the message."
-      }
-    },
-    {
-      "@type": "Question",
-      name: "When does InvoiceNudge launch?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "We're targeting Q2 2026 (April-June). Join the waitlist to get early access and your first 100 invoices free."
-      }
-    }
-  ]
 };
 
 export default function RootLayout({
@@ -82,19 +30,58 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "InvoiceNudge",
+              description: "AI-powered payment reminders for freelancers",
+              url: "https://invoicenudge.com",
+            }),
+          }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "What if the AI writes something that upsets my client?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "That's why we built Preview Mode. Every reminder is drafted by AI but approved by you before sending. You see exactly what your client will see.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How is this different from FreshBooks or QuickBooks?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "InvoiceNudge's AI learns YOUR communication style. If you're casual, we're casual. If you're formal, we're formal. Plus, we're not bundled with accounting features you don't need.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "When does InvoiceNudge launch?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "We're targeting Q2 2026 for public launch. Join the waitlist to get early access and lock in founding member pricing.",
+                  },
+                },
+              ],
+            }),
+          }}
         />
       </head>
-      <body className={`${GeistSans.className} antialiased`}>
+      <body className="font-sans antialiased bg-slate-50 text-slate-900">
         {children}
-              <script defer src="/pipeline-telemetry.js" data-telemetry-token="8b0937ff-5080-4691-b0bf-1add5fb964fe" data-telemetry-base-url="https://hooks.pointline.dev"></script>
+              <script defer src="/pipeline-telemetry.js" data-telemetry-token="0a371988-eb04-40d4-9661-c38e86406474" data-telemetry-base-url="https://hooks.pointline.dev"></script>
       </body>
     </html>
   );
