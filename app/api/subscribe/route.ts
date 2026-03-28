@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const TELEMETRY_BASE_URL = "https://hooks.pointline.dev";
 const TELEMETRY_TOKEN = "3423ec18-518e-420c-aa6e-09aea84ebde3";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, name } = body;
@@ -12,12 +12,12 @@ export async function POST(request: Request) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
       return NextResponse.json(
-        { success: false, message: "Please enter a valid email address." },
+        { success: false, message: "Please provide a valid email address." },
         { status: 400 }
       );
     }
 
-    // Log the signup to telemetry (non-blocking)
+    // Store the signup via telemetry
     await fetch(`${TELEMETRY_BASE_URL}/api/telemetry/event`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,13 +31,14 @@ export async function POST(request: Request) {
           timestamp: new Date().toISOString(),
         },
       }),
-    }).catch(() => null);
+    }).catch(() => null); // Non-blocking
 
-    console.log(`[WAITLIST SIGNUP] Email: ${email}, Name: ${name || "N/A"}`);
+    // Log to server console for backup
+    console.log(`[WAITLIST SIGNUP] Email: ${email}, Name: ${name || "N/A"}, Time: ${new Date().toISOString()}`);
 
     return NextResponse.json({
       success: true,
-      message: "You're on the waitlist! We'll email you when beta access opens.",
+      message: "You're on the waitlist! Check your email for confirmation.",
     });
   } catch (error) {
     console.error("[SUBSCRIBE ERROR]", error);
