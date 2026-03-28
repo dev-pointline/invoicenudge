@@ -1,116 +1,103 @@
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
-export const metadata = {
-  title: "Terms of Service — InvoiceNudge",
-  description: "Terms and conditions for using InvoiceNudge.",
-};
-
-export default function TermsPage() {
+export default function TermsOfService() {
   return (
-    <main className="min-h-screen py-16 px-6">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-[var(--bg-primary)]">
+      <div className="max-w-3xl mx-auto px-6 py-16">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-8"
+          className="inline-flex items-center gap-2 text-sm text-stone-600 hover:text-stone-900 transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to home
         </Link>
 
-        <h1 className="text-3xl font-medium mb-8">Terms of Service</h1>
+        <h1 className="text-3xl font-medium text-stone-900 mb-8">Terms of Service</h1>
+        <p className="text-sm text-stone-500 mb-8">Last updated: March 28, 2026</p>
 
-        <div className="prose prose-stone max-w-none space-y-8 text-[var(--text-secondary)] leading-relaxed">
-          <p>
-            <strong className="text-[var(--text-primary)]">Last updated:</strong> March 2026
-          </p>
-
-          <section>
-            <h2 className="text-xl font-medium text-[var(--text-primary)] mb-4">
-              Service Description
-            </h2>
-            <p>
-              InvoiceNudge is an AI-powered payment reminder service currently in pre-launch development. 
-              By joining our waitlist, you agree to receive email communications about our launch and 
-              product updates.
+        <div className="prose prose-stone max-w-none">
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">1. Acceptance of Terms</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              By accessing or using the InvoiceNudge website and services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
             </p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-medium text-[var(--text-primary)] mb-4">
-              Waitlist Terms
-            </h2>
-            <p>By signing up for the InvoiceNudge waitlist, you agree that:</p>
-            <ul className="list-disc pl-6 space-y-2 mt-4">
-              <li>You are providing accurate contact information</li>
-              <li>We may contact you about product launches and updates</li>
-              <li>Waitlist position does not guarantee early access</li>
-              <li>You can unsubscribe at any time</li>
-            </ul>
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">2. Description of Service</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              InvoiceNudge is a pre-launch product. Currently, we offer a waitlist for early access to our AI-powered payment reminder service. By joining the waitlist, you will receive updates about our launch and may be invited to participate in early access programs.
+            </p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-medium text-[var(--text-primary)] mb-4">
-              Acceptable Use
-            </h2>
-            <p>You agree not to:</p>
-            <ul className="list-disc pl-6 space-y-2 mt-4">
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">3. Waitlist Registration</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              When you join our waitlist, you agree to provide accurate and complete information. You are responsible for maintaining the confidentiality of any account credentials once the product launches.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">4. Acceptable Use</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              You agree not to:
+            </p>
+            <ul className="list-disc pl-6 text-stone-600 space-y-2">
+              <li>Use the service for any unlawful purpose</li>
               <li>Submit false or misleading information</li>
               <li>Attempt to gain unauthorized access to our systems</li>
-              <li>Use automated systems to submit multiple signups</li>
-              <li>Interfere with the operation of our website</li>
+              <li>Interfere with or disrupt the service</li>
+              <li>Use automated systems to access the service without permission</li>
             </ul>
           </section>
 
-          <section>
-            <h2 className="text-xl font-medium text-[var(--text-primary)] mb-4">
-              Intellectual Property
-            </h2>
-            <p>
-              All content on this website, including text, graphics, logos, and software, is the 
-              property of InvoiceNudge and is protected by intellectual property laws. You may not 
-              reproduce, distribute, or create derivative works without our written permission.
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">5. Intellectual Property</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              All content on the InvoiceNudge website, including text, graphics, logos, and software, is the property of InvoiceNudge or its licensors and is protected by intellectual property laws. You may not copy, modify, distribute, or create derivative works without our prior written consent.
             </p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-medium text-[var(--text-primary)] mb-4">
-              Limitation of Liability
-            </h2>
-            <p>
-              InvoiceNudge is provided "as is" without warranties of any kind. We are not liable 
-              for any damages arising from your use of this website or our services. This limitation 
-              applies to the fullest extent permitted by law.
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">6. Disclaimer of Warranties</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              The service is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not guarantee that the service will be uninterrupted, error-free, or secure.
             </p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-medium text-[var(--text-primary)] mb-4">
-              Changes to Terms
-            </h2>
-            <p>
-              We may update these terms from time to time. When we launch the full service, these 
-              terms will be updated to reflect the product's functionality. Continued use of our 
-              service after changes constitutes acceptance of the new terms.
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">7. Limitation of Liability</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              To the maximum extent permitted by law, InvoiceNudge shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use the service.
             </p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-medium text-[var(--text-primary)] mb-4">
-              Contact
-            </h2>
-            <p>
-              Questions about these terms? Email us at{" "}
-              <a
-                href="mailto:legal@invoicenudge.com"
-                className="text-[var(--accent)] hover:underline"
-              >
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">8. Changes to Terms</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              We reserve the right to modify these terms at any time. We will notify you of significant changes via the email address you provided. Your continued use of the service after changes constitutes acceptance of the new terms.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">9. Governing Law</h2>
+            <p className="text-stone-600 leading-relaxed mb-4">
+              These terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-xl font-medium text-stone-900 mb-4">10. Contact Information</h2>
+            <p className="text-stone-600 leading-relaxed">
+              For questions about these Terms of Service, please contact us at:{" "}
+              <a href="mailto:legal@invoicenudge.com" className="text-orange-500 hover:text-orange-600">
                 legal@invoicenudge.com
               </a>
             </p>
           </section>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

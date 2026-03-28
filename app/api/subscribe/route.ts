@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const TELEMETRY_BASE_URL = "https://hooks.pointline.dev";
-const TELEMETRY_TOKEN = "pl_6be5567e5b1940a282a75f3239a7260c";
+const TELEMETRY_TOKEN = "plh_6be5567e-5b19-40a2-82a7-5f3239a7260c";
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     // Validate email
     if (!email || typeof email !== "string") {
       return NextResponse.json(
-        { error: "Email is required" },
+        { success: false, error: "Email is required" },
         { status: 400 }
       );
     }
@@ -19,12 +19,12 @@ export async function POST(request: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "Please enter a valid email address" },
+        { success: false, error: "Invalid email format" },
         { status: 400 }
       );
     }
 
-    // Send to telemetry endpoint (non-blocking)
+    // Send to telemetry endpoint
     await fetch(`${TELEMETRY_BASE_URL}/api/telemetry/event`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,11 +35,10 @@ export async function POST(request: NextRequest) {
           email,
           name: name || null,
           source: "landing_page",
-          product: "invoicenudge",
           timestamp: new Date().toISOString(),
         },
       }),
-    }).catch(() => null);
+    }).catch(() => null); // Non-blocking
 
     // Log for debugging
     console.log(`[Waitlist] New signup: ${email}`);
@@ -51,7 +50,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("[Waitlist] Error:", error);
     return NextResponse.json(
-      { error: "Something went wrong. Please try again." },
+      { success: false, error: "Something went wrong. Please try again." },
       { status: 500 }
     );
   }
