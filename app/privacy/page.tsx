@@ -1,160 +1,113 @@
-import { ArrowLeft, Send } from "lucide-react";
+import { Mail } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
   title: "Privacy Policy — InvoiceNudge",
-  description: "Privacy Policy for InvoiceNudge. Learn how we collect, use, and protect your data.",
+  description: "Learn how InvoiceNudge collects, uses, and protects your personal information.",
 };
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-slate-50">
-      <nav className="border-b border-slate-200 bg-white">
-        <div className="max-w-4xl mx-auto px-6 py-4">
-          <Link href="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
+    <div className="min-h-screen bg-[#FAFAFA]">
+      <header className="border-b border-slate-100 bg-white">
+        <div className="max-w-3xl mx-auto px-6 py-4">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
+              <Mail className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-medium text-slate-900">InvoiceNudge</span>
           </Link>
         </div>
-      </nav>
+      </header>
 
-      <article className="max-w-4xl mx-auto px-6 py-12 lg:py-16">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-            <Send className="w-5 h-5 text-white" />
-          </div>
-          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">Privacy Policy</h1>
-        </div>
-
-        <p className="text-slate-500 mb-8">Last updated: January 2026</p>
+      <main className="max-w-3xl mx-auto px-6 py-16">
+        <h1 className="text-3xl font-medium text-slate-900 mb-2">Privacy Policy</h1>
+        <p className="text-slate-500 mb-12">Last updated: March 28, 2026</p>
 
         <div className="prose prose-slate max-w-none">
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">1. Introduction</h2>
-            <p className="text-slate-600 leading-relaxed mb-4">
-              InvoiceNudge ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our service.
-            </p>
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">Overview</h2>
             <p className="text-slate-600 leading-relaxed">
-              By using InvoiceNudge, you agree to the collection and use of information in accordance with this policy.
+              InvoiceNudge (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy and is committed to protecting your personal data. This privacy policy explains how we collect, use, and safeguard your information when you use our service.
             </p>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">2. Information We Collect</h2>
-            
-            <h3 className="text-lg font-medium text-slate-800 mb-3">Waitlist Information</h3>
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">Information We Collect</h2>
             <p className="text-slate-600 leading-relaxed mb-4">
-              When you join our waitlist, we collect your email address. This is used solely to notify you about our launch and provide early access opportunities.
+              During our pre-launch phase, we collect minimal information:
             </p>
-
-            <h3 className="text-lg font-medium text-slate-800 mb-3">Invoice Data (When Service Launches)</h3>
-            <p className="text-slate-600 leading-relaxed mb-4">
-              When you use InvoiceNudge, we will process invoice emails you forward to us. This includes:
-            </p>
-            <ul className="list-disc list-inside text-slate-600 mb-4 space-y-2">
-              <li>Client names and email addresses from invoices</li>
-              <li>Invoice amounts and due dates</li>
-              <li>The content of invoice emails for AI tone analysis</li>
-              <li>Payment reminder history</li>
+            <ul className="list-disc pl-6 text-slate-600 space-y-2">
+              <li><strong>Email address</strong> — Required to join our waitlist and receive launch notifications</li>
+              <li><strong>Name</strong> — Optional, if provided when signing up</li>
+              <li><strong>Usage data</strong> — Basic analytics about how you interact with our website</li>
             </ul>
+          </section>
 
-            <h3 className="text-lg font-medium text-slate-800 mb-3">Usage Data</h3>
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">How We Use Your Information</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              We use the information we collect to:
+            </p>
+            <ul className="list-disc pl-6 text-slate-600 space-y-2">
+              <li>Notify you when InvoiceNudge launches</li>
+              <li>Send occasional updates about our product development</li>
+              <li>Improve our website and service</li>
+              <li>Respond to your inquiries and support requests</li>
+            </ul>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">Data Sharing</h2>
             <p className="text-slate-600 leading-relaxed">
-              We automatically collect certain information about your device and how you interact with our service, including IP address, browser type, and pages visited.
+              We do not sell, rent, or share your personal information with third parties for marketing purposes. We may share data with service providers who help us operate our business (e.g., email service providers), but only to the extent necessary and under strict confidentiality agreements.
             </p>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">3. How We Use Your Information</h2>
-            <p className="text-slate-600 leading-relaxed mb-4">We use the information we collect to:</p>
-            <ul className="list-disc list-inside text-slate-600 space-y-2">
-              <li>Provide and maintain our service</li>
-              <li>Send payment reminder emails on your behalf</li>
-              <li>Analyze and improve our AI tone-matching algorithms</li>
-              <li>Communicate with you about updates, features, and support</li>
-              <li>Detect and prevent fraud or abuse</li>
-              <li>Comply with legal obligations</li>
-            </ul>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">4. Data Sharing and Disclosure</h2>
-            <p className="text-slate-600 leading-relaxed mb-4">
-              <strong>We do not sell your personal information or client data to third parties.</strong>
-            </p>
-            <p className="text-slate-600 leading-relaxed mb-4">We may share information with:</p>
-            <ul className="list-disc list-inside text-slate-600 space-y-2">
-              <li><strong>Service Providers:</strong> Third-party companies that help us operate our service (e.g., email delivery via Resend, AI processing via Groq, database hosting via Supabase)</li>
-              <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
-              <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
-            </ul>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">5. Data Security</h2>
-            <p className="text-slate-600 leading-relaxed mb-4">
-              We implement appropriate technical and organizational measures to protect your data:
-            </p>
-            <ul className="list-disc list-inside text-slate-600 space-y-2">
-              <li>Encryption of data in transit (TLS/SSL) and at rest</li>
-              <li>Secure authentication and access controls</li>
-              <li>Regular security audits and updates</li>
-              <li>Limited employee access to customer data</li>
-            </ul>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">6. Data Retention</h2>
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">Data Retention</h2>
             <p className="text-slate-600 leading-relaxed">
-              We retain your data for as long as your account is active or as needed to provide services. Waitlist emails are retained until you unsubscribe or we launch and you choose not to sign up. You can request deletion of your data at any time by contacting us.
+              We retain your email address and any associated information until you unsubscribe from our waitlist or request deletion. You can unsubscribe at any time by clicking the unsubscribe link in any email we send, or by contacting us directly.
             </p>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">7. Your Rights</h2>
-            <p className="text-slate-600 leading-relaxed mb-4">Depending on your location, you may have the right to:</p>
-            <ul className="list-disc list-inside text-slate-600 space-y-2">
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">Data Security</h2>
+            <p className="text-slate-600 leading-relaxed">
+              We implement appropriate technical and organizational security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction. All data is encrypted in transit and at rest.
+            </p>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">Your Rights</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              You have the right to:
+            </p>
+            <ul className="list-disc pl-6 text-slate-600 space-y-2">
               <li>Access the personal data we hold about you</li>
               <li>Request correction of inaccurate data</li>
               <li>Request deletion of your data</li>
-              <li>Object to or restrict processing of your data</li>
-              <li>Data portability (receive your data in a structured format)</li>
-              <li>Withdraw consent at any time</li>
+              <li>Unsubscribe from our communications at any time</li>
             </ul>
           </section>
 
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">8. GDPR Compliance</h2>
+          <section className="mb-10">
+            <h2 className="text-xl font-medium text-slate-900 mb-4">Contact Us</h2>
             <p className="text-slate-600 leading-relaxed">
-              For users in the European Economic Area (EEA), we comply with the General Data Protection Regulation (GDPR). Our legal basis for processing your data includes your consent, contract performance, and legitimate business interests.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">9. Changes to This Policy</h2>
-            <p className="text-slate-600 leading-relaxed">
-              We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last updated" date. We encourage you to review this policy periodically.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900 mb-4">10. Contact Us</h2>
-            <p className="text-slate-600 leading-relaxed">
-              If you have any questions about this Privacy Policy or our data practices, please contact us at:
-            </p>
-            <p className="text-slate-600 mt-4">
-              <strong>Email:</strong> privacy@invoicenudge.com<br />
-              <strong>Website:</strong> invoicenudge.pointline.dev
+              If you have any questions about this privacy policy or our data practices, please contact us at{" "}
+              <a href="mailto:privacy@invoicenudge.com" className="text-orange-500 hover:text-orange-600">
+                privacy@invoicenudge.com
+              </a>
             </p>
           </section>
         </div>
-      </article>
 
-      <footer className="border-t border-slate-200 bg-white py-8">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-sm text-slate-500">© 2026 InvoiceNudge. All rights reserved.</p>
+        <div className="mt-12 pt-8 border-t border-slate-200">
+          <Link href="/" className="text-orange-500 hover:text-orange-600 font-medium">
+            ← Back to home
+          </Link>
         </div>
-      </footer>
-    </main>
+      </main>
+    </div>
   );
 }
