@@ -4,12 +4,12 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "InvoiceNudge — Stop Chasing Late Payments",
-  description: "AI-powered payment reminders that sound like you. Forward your invoice, get paid 14 days faster. Join the waitlist for early access.",
-  keywords: ["invoice reminders", "freelancer payments", "late payment automation", "AI invoice follow-up", "payment collection"],
+  title: "InvoiceNudge — Stop Chasing Late Payments | AI Payment Reminders",
+  description: "Forward your invoice. We handle the follow-ups. Get paid 14 days faster with AI-powered payment reminders that sound like you. Join the waitlist.",
+  keywords: ["invoice reminders", "freelancer payments", "automated follow-ups", "payment automation", "late payment solution"],
   openGraph: {
     title: "InvoiceNudge — Stop Chasing Late Payments",
-    description: "AI-powered payment reminders that sound like you. Forward your invoice, get paid 14 days faster.",
+    description: "Forward your invoice. We handle the follow-ups. Get paid 14 days faster with AI-powered payment reminders.",
     type: "website",
     url: "https://invoicenudge.com",
     siteName: "InvoiceNudge",
@@ -17,9 +17,12 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "InvoiceNudge — Stop Chasing Late Payments",
-    description: "AI-powered payment reminders that sound like you. Forward your invoice, get paid 14 days faster.",
+    description: "Forward your invoice. We handle the follow-ups. Get paid 14 days faster.",
   },
-  robots: "index, follow",
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -52,26 +55,26 @@ export default function RootLayout({
               mainEntity: [
                 {
                   "@type": "Question",
-                  name: "What if the AI writes something that upsets my client?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "That's why we built Preview Mode. Every reminder is drafted by AI but approved by you before sending. You see exactly what your client will see.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "How is this different from FreshBooks or QuickBooks?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "InvoiceNudge's AI learns YOUR communication style. If you're casual, we're casual. If you're formal, we're formal. Plus, we're not bundled with accounting features you don't need.",
-                  },
-                },
-                {
-                  "@type": "Question",
                   name: "When does InvoiceNudge launch?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "We're targeting Q2 2026 for public launch. Join the waitlist to get early access and lock in founding member pricing.",
+                    text: "We're targeting launch within 8-12 weeks. Join the waitlist to be notified the moment we're live.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Will my clients know I'm using an automation tool?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "No. Emails come from your email address and match your communication style. There's no visible branding.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Do I need to connect my accounting software?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "No. Just forward your invoice emails. No QuickBooks, Xero, or FreshBooks integration required.",
                   },
                 },
               ],
@@ -79,9 +82,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans antialiased bg-slate-50 text-slate-900">
+      <body className="font-sans antialiased bg-white text-slate-900">
         {children}
-              <script defer src="/pipeline-telemetry.js" data-telemetry-token="0a371988-eb04-40d4-9661-c38e86406474" data-telemetry-base-url="https://hooks.pointline.dev"></script>
+              <script defer src="/pipeline-telemetry.js" data-telemetry-token="2de4b11a-bf6e-4b73-8fdf-d923e6f59110" data-telemetry-base-url="https://hooks.pointline.dev"></script>
       </body>
     </html>
   );
