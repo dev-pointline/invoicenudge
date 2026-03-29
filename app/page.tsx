@@ -2,73 +2,72 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  Mail,
-  Clock,
-  Eye,
-  MessageSquare,
-  CreditCard,
-  BarChart3,
-  Forward,
-  Sparkles,
-  Send,
-  Palette,
-  Briefcase,
-  Users,
+  ArrowRight,
   Check,
   ChevronDown,
-  ArrowRight,
-  Twitter,
-  ExternalLink,
-  Zap,
+  Clock,
+  Mail,
+  MessageSquare,
   Shield,
-  Globe,
+  Zap,
+  Send,
+  Eye,
+  BarChart3,
+  CreditCard,
+  Menu,
+  X,
+  Sparkles,
+  Calendar,
+  Users,
+  FileText,
+  DollarSign,
+  AlertCircle,
+  CheckCircle,
 } from "lucide-react";
 
-// Reveal animation hook
+/* ─── Scroll Reveal Hook ────────────────────────────────────────────────── */
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
+      ([entry]) => {
+        if (entry.isIntersecting) el.classList.add("visible");
       },
-      { threshold: 0.1 }
+      { threshold: 0.15 }
     );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
+    observer.observe(el);
     return () => observer.disconnect();
   }, []);
-
   return ref;
 }
 
-function Reveal({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+function Reveal({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const ref = useReveal();
   return (
-    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+    <div ref={ref} className={`reveal ${className}`}>
       {children}
     </div>
   );
 }
 
-// Waitlist form component
-function WaitlistForm({ variant = "default" }: { variant?: "default" | "compact" }) {
+/* ─── Waitlist Form ─────────────────────────────────────────────────────── */
+function WaitlistForm({ compact = false }: { compact?: boolean }) {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
-
     setStatus("loading");
     try {
       const res = await fetch("/api/subscribe", {
@@ -76,816 +75,952 @@ function WaitlistForm({ variant = "default" }: { variant?: "default" | "compact"
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      const data = await res.json();
-      if (data.success) {
+      if (res.ok) {
         setStatus("success");
-        setMessage("You're on the list! We'll be in touch soon.");
         setEmail("");
-      } else {
-        setStatus("error");
-        setMessage(data.error || "Something went wrong. Please try again.");
-      }
+      } else setStatus("error");
     } catch {
       setStatus("error");
-      setMessage("Something went wrong. Please try again.");
     }
-  };
+  }
 
   if (status === "success") {
     return (
-      <div className="flex items-center gap-2 text-green-600 bg-green-50 px-4 py-3 rounded-lg">
-        <Check className="w-5 h-5" />
-        <span className="text-sm font-medium">{message}</span>
+      <div
+        className="flex items-center gap-2 text-sm font-medium"
+        style={{ color: "hsl(var(--accent))" }}
+      >
+        <CheckCircle size={18} /> You&apos;re on the list! We&apos;ll notify you
+        when we launch.
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className={variant === "compact" ? "flex gap-2" : "flex flex-col sm:flex-row gap-3"}>
+    <form
+      onSubmit={handleSubmit}
+      className={`flex flex-col sm:flex-row gap-3 ${compact ? "" : "max-w-md"}`}
+    >
       <input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
-        className="input-field flex-1"
+        placeholder="you@example.com"
         required
+        className="flex-1 px-4 py-3 rounded-lg text-sm bg-white border border-[var(--border)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent)/0.2)] focus:border-[hsl(var(--accent)/0.4)] transition-shadow"
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="btn-primary whitespace-nowrap flex items-center justify-center gap-2"
+        className="btn-primary px-5 py-3 rounded-lg text-sm font-medium flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-60"
       >
-        {status === "loading" ? (
-          "Joining..."
-        ) : (
-          <>
-            Get early access
-            <ArrowRight className="w-4 h-4" />
-          </>
-        )}
+        {status === "loading" ? "Joining..." : "Join Waitlist"}
+        <ArrowRight size={14} />
       </button>
-      {status === "error" && <p className="text-red-500 text-sm mt-2">{message}</p>}
     </form>
   );
 }
 
-// Browser mockup component
-function BrowserMockup() {
+/* ─── Browser Chrome Mockup ─────────────────────────────────────────────── */
+function BrowserMockup({ children }: { children: React.ReactNode }) {
   return (
     <div className="browser-chrome">
-      <div className="browser-bar">
-        <div className="browser-dot browser-dot-red" />
-        <div className="browser-dot browser-dot-yellow" />
-        <div className="browser-dot browser-dot-green" />
-        <div className="browser-url">app.invoicenudge.com/dashboard</div>
+      <div className="browser-chrome-bar">
+        <div className="browser-dot" style={{ background: "#FF5F57" }} />
+        <div className="browser-dot" style={{ background: "#FFBD2E" }} />
+        <div className="browser-dot" style={{ background: "#28CA42" }} />
+        <div className="browser-url font-mono">app.invoicenudge.com</div>
       </div>
-      <div className="p-6 bg-stone-50">
-        {/* Mini dashboard mockup */}
-        <div className="space-y-4">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
-                <Zap className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-medium text-sm text-stone-800">InvoiceNudge</span>
-            </div>
-            <div className="text-xs text-stone-500">3 invoices outstanding</div>
-          </div>
-
-          {/* Stats row */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white rounded-lg p-3 border border-stone-200">
-              <div className="text-xs text-stone-500">Outstanding</div>
-              <div className="text-lg font-medium text-stone-800">$12,450</div>
-            </div>
-            <div className="bg-white rounded-lg p-3 border border-stone-200">
-              <div className="text-xs text-stone-500">Overdue</div>
-              <div className="text-lg font-medium text-orange-500">$3,200</div>
-            </div>
-            <div className="bg-white rounded-lg p-3 border border-stone-200">
-              <div className="text-xs text-stone-500">Collected</div>
-              <div className="text-lg font-medium text-green-600">$28,900</div>
-            </div>
-          </div>
-
-          {/* Invoice list */}
-          <div className="bg-white rounded-lg border border-stone-200 overflow-hidden">
-            <div className="px-4 py-2 border-b border-stone-100 flex items-center justify-between">
-              <span className="text-xs font-medium text-stone-600">Recent Invoices</span>
-              <span className="text-xs text-orange-500">View all</span>
-            </div>
-            
-            {/* Invoice row 1 */}
-            <div className="px-4 py-3 flex items-center justify-between border-b border-stone-50">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-medium text-blue-600">AC</div>
-                <div>
-                  <div className="text-sm font-medium text-stone-800">Acme Corp</div>
-                  <div className="text-xs text-stone-500">INV-2024-031 · Due in 3 days</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-medium text-stone-800">$4,500</div>
-                <div className="flex items-center gap-1 text-xs text-green-600">
-                  <Eye className="w-3 h-3" />
-                  <span>Viewed</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Invoice row 2 */}
-            <div className="px-4 py-3 flex items-center justify-between border-b border-stone-50">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-xs font-medium text-purple-600">TW</div>
-                <div>
-                  <div className="text-sm font-medium text-stone-800">TechWave Inc</div>
-                  <div className="text-xs text-orange-500">INV-2024-028 · 5 days overdue</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-medium text-stone-800">$3,200</div>
-                <div className="flex items-center gap-1 text-xs text-orange-500">
-                  <Send className="w-3 h-3" />
-                  <span>Reminder sent</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Invoice row 3 */}
-            <div className="px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-xs font-medium text-green-600">SM</div>
-                <div>
-                  <div className="text-sm font-medium text-stone-800">StartupMedia</div>
-                  <div className="text-xs text-stone-500">INV-2024-025 · Due in 12 days</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-medium text-stone-800">$4,750</div>
-                <div className="flex items-center gap-1 text-xs text-stone-400">
-                  <Clock className="w-3 h-3" />
-                  <span>Scheduled</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="p-4 sm:p-6">{children}</div>
     </div>
   );
 }
 
-// FAQ Item component
-function FAQItem({ question, answer }: { question: string; answer: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-
+/* ─── FAQ Item ──────────────────────────────────────────────────────────── */
+function FaqItem({
+  question,
+  answer,
+}: {
+  question: string;
+  answer: string;
+}) {
   return (
-    <div className="faq-item">
-      <button className="faq-button" onClick={() => setIsOpen(!isOpen)}>
-        <span>{question}</span>
-        <ChevronDown className={`w-5 h-5 text-stone-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-      </button>
-      <div className={`faq-content ${isOpen ? "open" : ""}`}>
-        <p className="text-stone-600 text-sm leading-relaxed">{answer}</p>
+    <details className="group border-b border-[var(--border)] last:border-0">
+      <summary className="flex items-center justify-between py-5 px-4 text-[15px] font-medium text-[var(--text-primary)] cursor-pointer">
+        {question}
+        <ChevronDown
+          size={16}
+          className="faq-chevron text-[var(--text-tertiary)] shrink-0 ml-4"
+        />
+      </summary>
+      <div className="pb-5 px-4 text-[15px] leading-relaxed text-[var(--text-secondary)]">
+        {answer}
       </div>
-    </div>
+    </details>
   );
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   MAIN PAGE
+   ═══════════════════════════════════════════════════════════════════════════ */
 export default function LandingPage() {
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
   return (
-    <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--bg-primary)]/80 backdrop-blur-md border-b border-[var(--border)]">
+    <main className="relative">
+      {/* ── Nav ──────────────────────────────────────────────────────────── */}
+      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-[var(--bg-primary)]/80 border-b border-[var(--border-subtle)]">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center"
+              style={{ background: "hsl(var(--accent))" }}
+            >
+              <Send size={16} className="text-white" />
             </div>
-            <span className="font-medium text-stone-800">InvoiceNudge</span>
+            <span className="text-[15px] font-medium tracking-tight">
+              InvoiceNudge
+            </span>
           </div>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm text-stone-600 hover:text-stone-900 transition-colors">Features</a>
-            <a href="#pricing" className="text-sm text-stone-600 hover:text-stone-900 transition-colors">Pricing</a>
-            <a href="#faq" className="text-sm text-stone-600 hover:text-stone-900 transition-colors">FAQ</a>
+          <div className="hidden md:flex items-center gap-8 text-sm text-[var(--text-secondary)]">
+            <a
+              href="#features"
+              className="hover:text-[var(--text-primary)] transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#pricing"
+              className="hover:text-[var(--text-primary)] transition-colors"
+            >
+              Pricing
+            </a>
+            <a
+              href="#faq"
+              className="hover:text-[var(--text-primary)] transition-colors"
+            >
+              FAQ
+            </a>
+            <a
+              href="#waitlist"
+              className="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5"
+            >
+              Join Waitlist <ArrowRight size={13} />
+            </a>
           </div>
-          <a href="#waitlist" className="btn-primary text-sm">
-            Join waitlist
-          </a>
+          <button
+            className="md:hidden p-2"
+            onClick={() => setMobileNavOpen(!mobileNavOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
+        {/* Mobile Nav */}
+        {mobileNavOpen && (
+          <div className="md:hidden border-t border-[var(--border)] bg-white px-6 py-4 space-y-4">
+            <a
+              href="#features"
+              className="block text-sm text-[var(--text-secondary)]"
+              onClick={() => setMobileNavOpen(false)}
+            >
+              Features
+            </a>
+            <a
+              href="#pricing"
+              className="block text-sm text-[var(--text-secondary)]"
+              onClick={() => setMobileNavOpen(false)}
+            >
+              Pricing
+            </a>
+            <a
+              href="#faq"
+              className="block text-sm text-[var(--text-secondary)]"
+              onClick={() => setMobileNavOpen(false)}
+            >
+              FAQ
+            </a>
+            <a
+              href="#waitlist"
+              className="btn-primary px-4 py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-1.5 w-full"
+              onClick={() => setMobileNavOpen(false)}
+            >
+              Join Waitlist <ArrowRight size={13} />
+            </a>
+          </div>
+        )}
       </nav>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-24 lg:pb-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid opacity-50" />
-        <div className="max-w-6xl mx-auto px-6 relative">
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 dot-grid opacity-40" />
+        <div className="relative max-w-6xl mx-auto px-6 pt-16 pb-16 lg:pt-24 lg:pb-24">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-stone-900 leading-[1.1] tracking-tight animate-hero">
-                Get paid on time without awkward follow-ups
+            {/* Left — Copy */}
+            <div className="stagger">
+              <p
+                className="hero-enter hero-enter-1 text-sm font-medium tracking-wide uppercase"
+                style={{ color: "hsl(var(--accent))" }}
+              >
+                For Freelancers Who Hate Chasing Payments
+              </p>
+              <h1 className="hero-enter hero-enter-2 mt-4 text-4xl sm:text-5xl lg:text-6xl font-medium tracking-[-0.02em] leading-[1.08] text-[var(--text-primary)]">
+                Never chase late payments again
               </h1>
-              <p className="mt-6 text-lg text-stone-600 leading-relaxed animate-hero-delay-1">
-                Forward your invoices to InvoiceNudge. Our AI sends polite, persistent payment reminders that actually work — so you can focus on your craft, not chasing money.
+              <p className="hero-enter hero-enter-3 mt-6 text-lg sm:text-xl leading-relaxed text-[var(--text-secondary)] max-w-lg">
+                Forward your invoice. Our AI sends polite reminders that sound
+                like you — not a robot. Get paid faster without awkward client
+                conversations.
               </p>
-              <div className="mt-8 animate-hero-delay-2" id="waitlist">
+              <div className="hero-enter hero-enter-4 mt-8">
                 <WaitlistForm />
-                <p className="mt-3 text-sm text-stone-500">
-                  Launching soon — be one of the first to automate your payment reminders
-                </p>
               </div>
-            </div>
-            <div className="animate-hero-delay-3">
-              <BrowserMockup />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Credibility Bar */}
-      <section className="py-12 border-y border-[var(--border)] bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal>
-            <div className="text-center">
-              <p className="text-sm font-medium text-stone-800 mb-6">
-                Built for freelancers and solo consultants who invoice $5K+ monthly
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
-                <div className="flex items-center gap-2 text-stone-500">
-                  <Mail className="w-5 h-5" />
-                  <span className="text-sm">Gmail</span>
-                </div>
-                <div className="flex items-center gap-2 text-stone-500">
-                  <Mail className="w-5 h-5" />
-                  <span className="text-sm">Outlook</span>
-                </div>
-                <div className="flex items-center gap-2 text-stone-500">
-                  <BarChart3 className="w-5 h-5" />
-                  <span className="text-sm">QuickBooks</span>
-                </div>
-                <div className="flex items-center gap-2 text-stone-500">
-                  <BarChart3 className="w-5 h-5" />
-                  <span className="text-sm">FreshBooks</span>
-                </div>
-                <div className="flex items-center gap-2 text-stone-500">
-                  <CreditCard className="w-5 h-5" />
-                  <span className="text-sm">Stripe</span>
-                </div>
-              </div>
-              <p className="mt-6 text-sm text-stone-500">
-                64% of freelancers report late payments as their #1 cash flow issue
+              <p className="hero-enter hero-enter-5 mt-4 text-xs text-[var(--text-tertiary)]">
+                Launching April 2026 — be one of the first 500 founding members
               </p>
             </div>
-          </Reveal>
-        </div>
-      </section>
 
-      {/* Problem Section */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-stone-900 text-center mb-16">
-              Sound familiar?
-            </h2>
-          </Reveal>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Reveal delay={100}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)]">
-                <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center mb-6">
-                  <Clock className="w-6 h-6 text-orange-500" />
+            {/* Right — Product Mockup */}
+            <div className="hero-enter hero-enter-5 hidden lg:block">
+              <BrowserMockup>
+                {/* Preview Mode Interface */}
+                <div className="space-y-4">
+                  {/* Header */}
+                  <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
+                    <div className="flex items-center gap-2">
+                      <Eye
+                        size={16}
+                        style={{ color: "hsl(var(--accent))" }}
+                      />
+                      <span className="text-sm font-medium">Preview Mode</span>
+                    </div>
+                    <span
+                      className="text-xs px-2 py-0.5 rounded-full font-medium"
+                      style={{
+                        background: "hsl(var(--accent) / 0.1)",
+                        color: "hsl(var(--accent))",
+                      }}
+                    >
+                      Casual Tone
+                    </span>
+                  </div>
+
+                  {/* Email Preview */}
+                  <div className="p-4 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)]">
+                    <div className="flex items-center gap-2 text-xs text-[var(--text-tertiary)] mb-3">
+                      <Mail size={12} />
+                      <span>To: sarah@designcorp.co</span>
+                    </div>
+                    <p className="text-sm font-medium text-[var(--text-primary)] mb-2">
+                      Quick reminder about invoice #1247
+                    </p>
+                    <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                      Hey Sarah! Just wanted to check in on the invoice I sent
+                      over for the brand refresh project ($2,500). Let me know
+                      if you have any questions — happy to chat!
+                    </p>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-3">
+                    <button
+                      className="flex-1 py-2.5 rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+                      style={{
+                        background: "hsl(var(--accent))",
+                        color: "white",
+                      }}
+                    >
+                      <Check size={14} />
+                      Approve & Send
+                    </button>
+                    <button className="flex-1 py-2.5 rounded-lg text-sm font-medium border border-[var(--border)] text-[var(--text-secondary)]">
+                      Edit
+                    </button>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="flex gap-4 pt-3 border-t border-[var(--border)]">
+                    <div className="text-center">
+                      <p className="text-lg font-medium">3</p>
+                      <p className="text-xs text-[var(--text-tertiary)]">
+                        Reminders sent
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-medium text-emerald-600">
+                        $8.4k
+                      </p>
+                      <p className="text-xs text-[var(--text-tertiary)]">
+                        Collected
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-lg font-medium">12 days</p>
+                      <p className="text-xs text-[var(--text-tertiary)]">
+                        Avg time to pay
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-3">
-                  Chasing payments kills your creative time
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  You spend 4-6 hours every month writing awkward "just following up" emails instead of doing billable work.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={200}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)]">
-                <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center mb-6">
-                  <Mail className="w-6 h-6 text-orange-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-3">
-                  Clients forget, invoices get buried
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  Your invoice lands in their inbox on a busy day and disappears. Without reminders, you're invisible.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={300}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)]">
-                <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center mb-6">
-                  <MessageSquare className="w-6 h-6 text-orange-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-3">
-                  Being persistent feels unprofessional
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  You want to be paid but don't want to seem desperate. So you wait... and wait... and your cash flow suffers.
-                </p>
-              </div>
-            </Reveal>
+              </BrowserMockup>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Solution Section */}
-      <section className="py-24 lg:py-32 bg-white border-y border-[var(--border)]">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-stone-900 text-center mb-16">
-              There's a better way
-            </h2>
-          </Reveal>
-          <div className="space-y-6 max-w-3xl mx-auto">
-            <Reveal delay={100}>
-              <div className="flex items-start gap-6 p-6 rounded-xl bg-stone-50">
-                <div className="text-stone-400 text-sm font-medium whitespace-nowrap">Before</div>
-                <div className="flex-1 text-stone-600">Manually tracking due dates in spreadsheets</div>
-                <ArrowRight className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <div className="flex-1 text-stone-900 font-medium">Forward once, automated reminders forever</div>
-              </div>
-            </Reveal>
-            <Reveal delay={200}>
-              <div className="flex items-start gap-6 p-6 rounded-xl bg-stone-50">
-                <div className="text-stone-400 text-sm font-medium whitespace-nowrap">Before</div>
-                <div className="flex-1 text-stone-600">Writing cringy "just checking in" emails</div>
-                <ArrowRight className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <div className="flex-1 text-stone-900 font-medium">AI-crafted polite nudges that match your tone</div>
-              </div>
-            </Reveal>
-            <Reveal delay={300}>
-              <div className="flex items-start gap-6 p-6 rounded-xl bg-stone-50">
-                <div className="text-stone-400 text-sm font-medium whitespace-nowrap">Before</div>
-                <div className="flex-1 text-stone-600">Wondering if clients even saw your invoice</div>
-                <ArrowRight className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                <div className="flex-1 text-stone-900 font-medium">Real-time open and view tracking</div>
-              </div>
-            </Reveal>
+      {/* ── Credibility Bar ──────────────────────────────────────────────── */}
+      <Reveal>
+        <section className="border-y border-[var(--border)] bg-[var(--bg-secondary)]">
+          <div className="max-w-6xl mx-auto px-6 py-10 text-center">
+            <p className="text-[15px] text-[var(--text-secondary)]">
+              Built for freelancers who invoice $5k-50k/month and hate chasing
+              payments
+            </p>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-[var(--text-tertiary)]">
+              <span className="flex items-center gap-1.5">
+                <Mail size={14} /> Gmail
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Mail size={14} /> Outlook
+              </span>
+              <span className="flex items-center gap-1.5">
+                <FileText size={14} /> QuickBooks
+              </span>
+              <span className="flex items-center gap-1.5">
+                <FileText size={14} /> Xero
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CreditCard size={14} /> Stripe
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CreditCard size={14} /> PayPal
+              </span>
+            </div>
+            <p className="mt-6 text-sm text-[var(--text-tertiary)]">
+              85% of freelancers experience late payments.{" "}
+              <span className="text-[var(--text-secondary)]">
+                You&apos;re not alone.
+              </span>
+            </p>
           </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
 
-      {/* Features Section */}
-      <section className="py-24 lg:py-32" id="features">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-stone-900 text-center mb-4">
+      {/* ── Problem / Pain Points ────────────────────────────────────────── */}
+      <Reveal>
+        <section className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em]">
+              The late payment problem is real
+            </h2>
+            <p className="mt-4 text-[var(--text-secondary)] leading-relaxed">
+              You didn&apos;t become a freelancer to spend hours chasing
+              invoices
+            </p>
+          </div>
+          <div className="mt-14 grid md:grid-cols-3 gap-6 stagger">
+            {[
+              {
+                icon: Clock,
+                title: "Wasted Hours",
+                desc: "You spend 8-12 hours every month drafting follow-up emails, checking payment status, and stressing about who hasn't paid. That's 3 work weeks per year lost to admin.",
+              },
+              {
+                icon: MessageSquare,
+                title: "Awkward Conversations",
+                desc: "You don't want to seem desperate or damage the relationship. So you wait... and wait... and the invoice slips to 45 days overdue.",
+              },
+              {
+                icon: AlertCircle,
+                title: "Cash Flow Anxiety",
+                desc: "It's the 28th and a $3,000 invoice is still unpaid. You're anxiety-checking your bank account wondering if you can make rent.",
+              },
+            ].map((pain, i) => (
+              <Reveal key={i}>
+                <div className="p-6 rounded-xl border border-[var(--border)] bg-white">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center"
+                    style={{ background: "hsl(var(--accent) / 0.08)" }}
+                  >
+                    <pain.icon
+                      size={18}
+                      style={{ color: "hsl(var(--accent))" }}
+                    />
+                  </div>
+                  <h3 className="mt-4 text-[15px] font-medium">{pain.title}</h3>
+                  <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                    {pain.desc}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── Solution (Before / After) ────────────────────────────────────── */}
+      <Reveal>
+        <section className="bg-[var(--bg-secondary)] relative">
+          <div className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em]">
+                From chasing to collecting
+              </h2>
+            </div>
+            <div className="mt-14 grid md:grid-cols-2 gap-6">
+              {/* Before */}
+              <div className="p-6 sm:p-8 rounded-xl border border-[var(--border)] bg-white">
+                <p className="text-xs font-medium uppercase tracking-wider text-[var(--text-tertiary)]">
+                  Before InvoiceNudge
+                </p>
+                <ul className="mt-4 space-y-3">
+                  {[
+                    "Invoice due → 15 days pass → Still not paid",
+                    "Draft \"polite but firm\" email → Agonize for 30 minutes",
+                    "Send → Wait → Client ignores → Repeat the cycle",
+                    "8-12 hours/month wasted on follow-ups",
+                    "Cash flow unpredictable, rent anxiety real",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="text-sm text-[var(--text-secondary)] flex items-start gap-2"
+                    >
+                      <X
+                        size={14}
+                        className="text-[var(--text-tertiary)] mt-0.5 shrink-0"
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* After */}
+              <div
+                className="p-6 sm:p-8 rounded-xl border"
+                style={{
+                  borderColor: "hsl(var(--accent) / 0.2)",
+                  background: "hsl(var(--accent-light))",
+                }}
+              >
+                <p
+                  className="text-xs font-medium uppercase tracking-wider"
+                  style={{ color: "hsl(var(--accent))" }}
+                >
+                  After InvoiceNudge
+                </p>
+                <ul className="mt-4 space-y-3">
+                  {[
+                    "Forward invoice → AI handles everything",
+                    "Day 0: Friendly reminder. Day 7: Check-in. Day 14: Follow-up",
+                    "Client pays in 14 days instead of 39",
+                    "10 seconds/month instead of 10 hours",
+                    "Predictable cash flow, peace of mind",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="text-sm text-[var(--text-primary)] flex items-start gap-2"
+                    >
+                      <Check
+                        size={14}
+                        className="mt-0.5 shrink-0"
+                        style={{ color: "hsl(var(--accent))" }}
+                      />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── Features (Bento Grid) ────────────────────────────────────────── */}
+      <Reveal>
+        <section id="features" className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em]">
               Everything you need to get paid
             </h2>
-            <p className="text-stone-600 text-center mb-16 max-w-2xl mx-auto">
-              Designed to turn your outstanding invoices into collected revenue — without the manual work.
+            <p className="mt-4 text-[var(--text-secondary)]">
+              Built for freelancers who want results, not complexity
             </p>
-          </Reveal>
-          
-          {/* Bento grid layout */}
-          <div className="grid md:grid-cols-3 gap-4">
-            {/* Large card - spans 2 columns */}
-            <Reveal delay={100} className="md:col-span-2">
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)] h-full">
-                <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center mb-6">
-                  <Forward className="w-6 h-6 text-orange-500" />
-                </div>
-                <h3 className="text-xl font-medium text-stone-900 mb-3">
-                  Email-Forward Setup
-                </h3>
-                <p className="text-stone-600 leading-relaxed">
-                  Forward your invoice email to us. Our AI extracts client, amount, and due date automatically. No manual data entry, no complex integrations, no learning curve.
-                </p>
+          </div>
+          {/* Bento Grid */}
+          <div className="mt-14 grid md:grid-cols-3 gap-4 stagger">
+            {/* Large card — spans 2 cols */}
+            <Reveal className="md:col-span-2 p-6 sm:p-8 rounded-xl border border-[var(--border)] bg-white">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: "hsl(var(--accent) / 0.08)" }}
+              >
+                <Sparkles
+                  size={18}
+                  style={{ color: "hsl(var(--accent))" }}
+                />
               </div>
+              <h3 className="mt-4 text-lg font-medium">AI Tone Matching</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-secondary)] max-w-md">
+                AI learns your communication style from your original invoice.
+                Casual freelancer? Friendly nudges. Buttoned-up consultant?
+                Professional reminders. Never sounds like a robot.
+              </p>
             </Reveal>
-            
-            {/* Regular card */}
-            <Reveal delay={150}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)] h-full">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-6">
-                  <Send className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-3">
-                  Smart Reminder Sequences
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  Pre-due, on-due, and overdue reminders sent at optimal times. Designed to maximize response without annoying clients.
-                </p>
+            {/* Small card */}
+            <Reveal className="p-6 sm:p-8 rounded-xl border border-[var(--border)] bg-white">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: "hsl(var(--accent) / 0.08)" }}
+              >
+                <Eye size={18} style={{ color: "hsl(var(--accent))" }} />
               </div>
+              <h3 className="mt-4 text-[15px] font-medium">Preview Mode</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                See every reminder before it sends. Approve with one click, or
+                edit the wording. You&apos;re always in control.
+              </p>
             </Reveal>
-            
-            {/* Regular card */}
-            <Reveal delay={200}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)] h-full">
-                <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-6">
-                  <Eye className="w-6 h-6 text-green-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-3">
-                  Open & View Tracking
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  Know exactly when clients open your reminders. Follow up strategically, not blindly.
-                </p>
+            {/* Small card */}
+            <Reveal className="p-6 sm:p-8 rounded-xl border border-[var(--border)] bg-white">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: "hsl(var(--accent) / 0.08)" }}
+              >
+                <Calendar size={18} style={{ color: "hsl(var(--accent))" }} />
               </div>
+              <h3 className="mt-4 text-[15px] font-medium">
+                Escalating Politeness
+              </h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                Day 0: Friendly. Day 7: Check-in. Day 14: Firm. Day 21: Final
+                notice. The AI knows when to turn up the heat.
+              </p>
             </Reveal>
-            
-            {/* Large card - spans 2 columns */}
-            <Reveal delay={250} className="md:col-span-2">
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)] h-full">
-                <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-6">
-                  <Sparkles className="w-6 h-6 text-purple-500" />
-                </div>
-                <h3 className="text-xl font-medium text-stone-900 mb-3">
-                  Tone Matching AI
-                </h3>
-                <p className="text-stone-600 leading-relaxed">
-                  Reminders that sound like you wrote them. Professional for corporate clients, casual for creative collaborators. Your voice, automated.
-                </p>
+            {/* Large card — spans 2 cols */}
+            <Reveal className="md:col-span-2 p-6 sm:p-8 rounded-xl border border-[var(--border)] bg-white">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: "hsl(var(--accent) / 0.08)" }}
+              >
+                <Zap size={18} style={{ color: "hsl(var(--accent))" }} />
               </div>
+              <h3 className="mt-4 text-lg font-medium">
+                Email-Forward Workflow
+              </h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-secondary)] max-w-md">
+                No complex setup. No accounting software required. Just forward
+                your invoice to followup@invoicenudge.com and we handle the rest
+                in 60 seconds.
+              </p>
             </Reveal>
-            
-            {/* Regular card */}
-            <Reveal delay={300}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)] h-full">
-                <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mb-6">
-                  <CreditCard className="w-6 h-6 text-amber-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-3">
-                  Payment Link Integration
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  Connect Stripe, PayPal, or bank details. Make paying as easy as clicking a button.
-                </p>
+            {/* Two more small cards */}
+            <Reveal className="p-6 sm:p-8 rounded-xl border border-[var(--border)] bg-white">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: "hsl(var(--accent) / 0.08)" }}
+              >
+                <BarChart3 size={18} style={{ color: "hsl(var(--accent))" }} />
               </div>
+              <h3 className="mt-4 text-[15px] font-medium">
+                Payment Dashboard
+              </h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                Track days-to-payment before vs after. See exactly how much
+                time and money you&apos;re saving.
+              </p>
             </Reveal>
-            
-            {/* Regular card */}
-            <Reveal delay={350}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)] h-full">
-                <div className="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center mb-6">
-                  <BarChart3 className="w-6 h-6 text-rose-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-3">
-                  Cash Flow Dashboard
-                </h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  See outstanding invoices, overdue amounts, and collection rates at a glance. Your financial health, visualized.
-                </p>
+            <Reveal className="md:col-span-2 p-6 sm:p-8 rounded-xl border border-[var(--border)] bg-white">
+              <div
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ background: "hsl(var(--accent) / 0.08)" }}
+              >
+                <CreditCard size={18} style={{ color: "hsl(var(--accent))" }} />
               </div>
+              <h3 className="mt-4 text-lg font-medium">Works With Everything</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-[var(--text-secondary)] max-w-md">
+                Zelle, Venmo, PayPal, check, wire, crypto — we don&apos;t care
+                how clients pay. We just make sure they pay on time. No payment
+                processor lock-in.
+              </p>
             </Reveal>
           </div>
-        </div>
-      </section>
+        </section>
+      </Reveal>
 
-      {/* How It Works - Dark Section */}
-      <section className="py-24 lg:py-32 section-dark">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-white text-center mb-4">
-              How it works
-            </h2>
-            <p className="text-white/70 text-center mb-16 max-w-2xl mx-auto">
-              Get started in under 60 seconds. No complex setup required.
-            </p>
-          </Reveal>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Reveal delay={100}>
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
-                  <Forward className="w-8 h-8 text-orange-400" />
-                </div>
-                <div className="text-orange-400 text-sm font-medium mb-2">Step 1</div>
-                <h3 className="text-xl font-medium text-white mb-3">Forward</h3>
-                <p className="text-white/70 text-sm">
-                  Send your invoice email to pay@invoicenudge.com. That's it.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={200}>
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-8 h-8 text-orange-400" />
-                </div>
-                <div className="text-orange-400 text-sm font-medium mb-2">Step 2</div>
-                <h3 className="text-xl font-medium text-white mb-3">AI Parses</h3>
-                <p className="text-white/70 text-sm">
-                  Our AI extracts client details, amount, and due date instantly.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={300}>
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto mb-6">
-                  <Send className="w-8 h-8 text-orange-400" />
-                </div>
-                <div className="text-orange-400 text-sm font-medium mb-2">Step 3</div>
-                <h3 className="text-xl font-medium text-white mb-3">Reminders Sent</h3>
-                <p className="text-white/70 text-sm">
-                  Polite, persistent reminders go out automatically until you're paid.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Use Cases Section */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-stone-900 text-center mb-4">
-              Built for people like you
-            </h2>
-            <p className="text-stone-600 text-center mb-16 max-w-2xl mx-auto">
-              Whether you're a solo creative or managing a small team, InvoiceNudge adapts to your workflow.
-            </p>
-          </Reveal>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Reveal delay={100}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)]">
-                <div className="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center mb-6">
-                  <Palette className="w-6 h-6 text-pink-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-2">The Solo Designer</h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  Juggles 5-8 active clients monthly. Uses InvoiceNudge to ensure no invoice falls through the cracks while staying focused on creative work.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={200}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)]">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-6">
-                  <Briefcase className="w-6 h-6 text-blue-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-2">The Busy Consultant</h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  Bills hourly across multiple projects. Forwards invoices immediately after sending, never thinks about follow-ups again.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={300}>
-              <div className="bg-white rounded-xl p-8 border border-[var(--border)]">
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-6">
-                  <Users className="w-6 h-6 text-emerald-500" />
-                </div>
-                <h3 className="text-lg font-medium text-stone-900 mb-2">The Agency Owner</h3>
-                <p className="text-stone-600 text-sm leading-relaxed">
-                  Manages a small team with dozens of outstanding invoices. Uses the dashboard to prioritize which clients need personal attention.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section className="py-24 lg:py-32 bg-white border-y border-[var(--border)]" id="pricing">
-        <div className="max-w-6xl mx-auto px-6">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-stone-900 text-center mb-4">
-              Planned pricing
-            </h2>
-            <p className="text-stone-600 text-center mb-16 max-w-2xl mx-auto">
-              Simple, transparent pricing. No hidden fees. Cancel anytime.
-            </p>
-          </Reveal>
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Starter */}
-            <Reveal delay={100}>
-              <div className="bg-stone-50 rounded-xl p-8 border border-[var(--border)]">
-                <h3 className="text-lg font-medium text-stone-900 mb-2">Starter</h3>
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl font-medium text-stone-900">$19</span>
-                  <span className="text-stone-500">/month</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Up to 10 invoices/month
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Email reminders
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Basic open tracking
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Email support
-                  </li>
-                </ul>
-                <a href="#waitlist" className="btn-secondary w-full block text-center">
-                  Join waitlist
-                </a>
-              </div>
-            </Reveal>
-            
-            {/* Pro - Popular */}
-            <Reveal delay={200}>
-              <div className="bg-white rounded-xl p-8 border-2 border-orange-500 relative pricing-popular">
-                <h3 className="text-lg font-medium text-stone-900 mb-2">Pro</h3>
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl font-medium text-stone-900">$49</span>
-                  <span className="text-stone-500">/month</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Unlimited invoices
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Email + SMS reminders
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Tone customization
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Advanced analytics
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Priority support
-                  </li>
-                </ul>
-                <a href="#waitlist" className="btn-primary w-full block text-center">
-                  Join waitlist
-                </a>
-              </div>
-            </Reveal>
-            
-            {/* Agency */}
-            <Reveal delay={300}>
-              <div className="bg-stone-50 rounded-xl p-8 border border-[var(--border)]">
-                <h3 className="text-lg font-medium text-stone-900 mb-2">Agency</h3>
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl font-medium text-stone-900">$149</span>
-                  <span className="text-stone-500">/month</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Everything in Pro
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Team access (5 seats)
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    White-label reminders
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    API access
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-stone-600">
-                    <Check className="w-4 h-4 text-green-500" />
-                    Dedicated success manager
-                  </li>
-                </ul>
-                <a href="#waitlist" className="btn-secondary w-full block text-center">
-                  Join waitlist
-                </a>
-              </div>
-            </Reveal>
-          </div>
-          
-          {/* Pricing FAQs */}
-          <Reveal delay={400}>
-            <div className="mt-16 max-w-2xl mx-auto">
-              <div className="grid md:grid-cols-3 gap-8 text-center">
-                <div>
-                  <h4 className="font-medium text-stone-900 mb-2">When will this launch?</h4>
-                  <p className="text-sm text-stone-600">Targeting early Q2 2026. Waitlist members get first access.</p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-stone-900 mb-2">Will there be a free trial?</h4>
-                  <p className="text-sm text-stone-600">Yes, 14-day free trial on all plans. No credit card required.</p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-stone-900 mb-2">Can I cancel anytime?</h4>
-                  <p className="text-sm text-stone-600">Absolutely. No contracts, cancel with one click.</p>
-                </div>
-              </div>
+      {/* ── How It Works ─────────────────────────────────────────────────── */}
+      <Reveal>
+        <section className="bg-[var(--text-primary)] text-white relative">
+          <div className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em]">
+                How it works
+              </h2>
+              <p className="mt-4 text-white/60">
+                From invoice to payment in 3 simple steps
+              </p>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-24 lg:py-32" id="faq">
-        <div className="max-w-3xl mx-auto px-6">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-stone-900 text-center mb-16">
-              Frequently asked questions
-            </h2>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="bg-white rounded-xl border border-[var(--border)] divide-y divide-[var(--border)] px-6">
-              <FAQItem
-                question="How does email forwarding work?"
-                answer="Forward any invoice email to pay@invoicenudge.com. Our AI reads the email and any PDF attachments to extract the client name, invoice amount, and due date. No manual data entry required."
-              />
-              <FAQItem
-                question="What if my client uses a different language?"
-                answer="We support invoices in English, Spanish, French, German, and Portuguese. Our AI can extract information from invoices in any of these languages. More languages are coming soon."
-              />
-              <FAQItem
-                question="Will my clients know I'm using automation?"
-                answer="Reminders come from your email address and match your communication style. Clients see a professional follow-up message, not a robotic template. You maintain full control over tone and timing."
-              />
-              <FAQItem
-                question="Is my financial data secure?"
-                answer="We use bank-level encryption for all data. We're working toward SOC 2 compliance and never share or sell your data. Your invoices and client information remain strictly confidential."
-              />
-              <FAQItem
-                question="Can I customize the reminder schedule?"
-                answer="Pro and Agency plans let you set exact timing and frequency for each client. You can customize when reminders go out before, on, and after the due date."
-              />
-              <FAQItem
-                question="What if I already use QuickBooks or FreshBooks?"
-                answer="We integrate with major invoicing tools including QuickBooks, FreshBooks, Wave, and Xero. Connect your account for automatic invoice import alongside the email-forward method."
-              />
-              <FAQItem
-                question="How is this different from my invoicing software's reminders?"
-                answer="Most invoicing tools send generic, one-size-fits-all reminders. InvoiceNudge uses AI to craft personalized messages that match your tone and optimizes timing based on client behavior patterns."
-              />
-              <FAQItem
-                question="When does InvoiceNudge launch?"
-                answer="We're in private beta now and targeting a public launch in early Q2 2026. Join the waitlist to get early access and lock in launch pricing."
-              />
+            <div className="mt-14 grid md:grid-cols-3 gap-12 stagger">
+              {[
+                {
+                  step: "01",
+                  title: "Forward your invoice",
+                  desc: "Send any invoice email to followup@invoicenudge.com. Our AI extracts client name, amount, and due date automatically.",
+                  icon: Mail,
+                },
+                {
+                  step: "02",
+                  title: "AI drafts your reminders",
+                  desc: "Based on your tone and the invoice details, AI creates a sequence of reminders (Day 0, 7, 14, 21). Review them in Preview Mode.",
+                  icon: Sparkles,
+                },
+                {
+                  step: "03",
+                  title: "Get paid, stress-free",
+                  desc: "Reminders send automatically. You get notified when clients reply. Focus on client work, not payment chasing.",
+                  icon: DollarSign,
+                },
+              ].map((s, i) => (
+                <Reveal key={i}>
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl font-light text-white/20">
+                        {s.step}
+                      </span>
+                      <s.icon size={20} className="text-white/40" />
+                    </div>
+                    <h3 className="mt-4 text-[15px] font-medium">{s.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/60">
+                      {s.desc}
+                    </p>
+                  </div>
+                </Reveal>
+              ))}
             </div>
-          </Reveal>
-        </div>
-      </section>
+          </div>
+        </section>
+      </Reveal>
 
-      {/* Final CTA Section */}
-      <section className="py-24 lg:py-32 bg-stone-900">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <Reveal>
-            <h2 className="text-3xl md:text-4xl font-medium text-white mb-4">
-              Stop chasing payments. Start getting paid.
+      {/* ── Use Cases ────────────────────────────────────────────────────── */}
+      <Reveal>
+        <section className="max-w-6xl mx-auto px-6 py-20 lg:py-28">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em]">
+              Built for freelancers like you
             </h2>
-            <p className="text-white/70 mb-8 max-w-xl mx-auto">
-              Join freelancers who are tired of being their own collections department. Get early access and lock in launch pricing.
+            <p className="mt-4 text-[var(--text-secondary)]">
+              See how different freelancers would use InvoiceNudge
             </p>
-            <div className="max-w-md mx-auto">
+          </div>
+          <div className="mt-14 grid md:grid-cols-3 gap-6 stagger">
+            {[
+              {
+                role: "The Solo Designer",
+                context: "Freelance graphic designer, 5-8 clients/month",
+                narrative:
+                  "Uses Google Docs for invoicing. Spends Fridays chasing late payments instead of new projects. InvoiceNudge handles follow-ups so Friday becomes a client work day again.",
+                icon: Users,
+              },
+              {
+                role: "The Busy Consultant",
+                context: "Independent marketing consultant, $80-150k/year",
+                narrative:
+                  "Has 10-15 invoices outstanding at any time. Considered hiring a VA just to handle AR. InvoiceNudge replaces the VA for $19/month instead of $500/month.",
+                icon: BarChart3,
+              },
+              {
+                role: "The Agency Owner",
+                context: "Small agency (2-3 people), 30+ invoices/month",
+                narrative:
+                  "Clients on NET-30 terms. Late payments affect cash flow and team payroll. The Agency plan automates collection across the whole team with white-label emails.",
+                icon: Users,
+              },
+            ].map((uc, i) => (
+              <Reveal key={i}>
+                <div className="p-6 rounded-xl border border-[var(--border)] bg-white">
+                  <div
+                    className="w-10 h-10 rounded-lg flex items-center justify-center"
+                    style={{ background: "hsl(var(--accent) / 0.08)" }}
+                  >
+                    <uc.icon
+                      size={18}
+                      style={{ color: "hsl(var(--accent))" }}
+                    />
+                  </div>
+                  <p
+                    className="mt-4 text-xs font-medium uppercase tracking-wider"
+                    style={{ color: "hsl(var(--accent))" }}
+                  >
+                    {uc.role}
+                  </p>
+                  <p className="mt-1 text-xs text-[var(--text-tertiary)]">
+                    {uc.context}
+                  </p>
+                  <p className="mt-4 text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                    {uc.narrative}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── Pricing ──────────────────────────────────────────────────────── */}
+      <Reveal>
+        <section id="pricing" className="bg-[var(--bg-secondary)] relative">
+          <div className="max-w-5xl mx-auto px-6 py-20 lg:py-28">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em]">
+                Simple, transparent pricing
+              </h2>
+              <p className="mt-3 text-sm text-[var(--text-tertiary)]">
+                Planned launch pricing — founding members lock in rates forever
+              </p>
+            </div>
+            <div className="mt-14 grid md:grid-cols-3 gap-6 stagger">
+              {[
+                {
+                  name: "Starter",
+                  price: "$19",
+                  period: "/mo",
+                  annual: "$199/yr (save $29)",
+                  features: [
+                    "10 invoices/month",
+                    "AI reminders (Day 0/7/14/21)",
+                    "Preview Mode",
+                    "Email-forward workflow",
+                    "Basic dashboard",
+                  ],
+                  recommended: false,
+                },
+                {
+                  name: "Pro",
+                  price: "$49",
+                  period: "/mo",
+                  annual: "$499/yr (save $89)",
+                  features: [
+                    "50 invoices/month",
+                    "Everything in Starter",
+                    "Autopilot Mode",
+                    "Client reply detection",
+                    "Custom reminder schedules",
+                    "Priority support (4hr)",
+                  ],
+                  recommended: true,
+                },
+                {
+                  name: "Agency",
+                  price: "$149",
+                  period: "/mo",
+                  annual: "$1,499/yr (save $289)",
+                  features: [
+                    "Unlimited invoices",
+                    "Everything in Pro",
+                    "3 team seats",
+                    "White-label emails",
+                    "Dedicated account manager",
+                    "API access",
+                  ],
+                  recommended: false,
+                },
+              ].map((tier, i) => (
+                <Reveal key={i}>
+                  <div
+                    className={`p-6 sm:p-8 rounded-xl border bg-white flex flex-col ${
+                      tier.recommended
+                        ? "pricing-recommended ring-1 ring-[hsl(var(--accent)/0.2)]"
+                        : "border-[var(--border)]"
+                    }`}
+                  >
+                    {tier.recommended && (
+                      <span
+                        className="self-start text-xs font-medium px-2.5 py-0.5 rounded-full mb-4"
+                        style={{
+                          background: "hsl(var(--accent) / 0.1)",
+                          color: "hsl(var(--accent))",
+                        }}
+                      >
+                        Most Popular
+                      </span>
+                    )}
+                    <p className="text-sm font-medium text-[var(--text-secondary)]">
+                      {tier.name}
+                    </p>
+                    <p className="mt-2 flex items-baseline gap-1">
+                      <span className="text-3xl font-medium">{tier.price}</span>
+                      <span className="text-sm text-[var(--text-tertiary)]">
+                        {tier.period}
+                      </span>
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--text-tertiary)]">
+                      {tier.annual}
+                    </p>
+                    <ul className="mt-6 space-y-3 flex-1">
+                      {tier.features.map((f, j) => (
+                        <li
+                          key={j}
+                          className="flex items-start gap-2 text-sm text-[var(--text-secondary)]"
+                        >
+                          <Check
+                            size={14}
+                            className="mt-0.5 shrink-0"
+                            style={{ color: "hsl(var(--accent))" }}
+                          />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    <a
+                      href="#waitlist"
+                      className={`mt-8 block text-center py-2.5 rounded-lg text-sm font-medium transition-all ${
+                        tier.recommended
+                          ? "btn-primary"
+                          : "border border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                      }`}
+                    >
+                      Join Waitlist
+                    </a>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+            {/* Pricing FAQs */}
+            <div className="mt-12 max-w-xl mx-auto text-center text-sm text-[var(--text-tertiary)] space-y-2">
+              <p>
+                <strong className="text-[var(--text-secondary)]">
+                  Free trial?
+                </strong>{" "}
+                Yes, 7 days free on all plans. No credit card required.
+              </p>
+              <p>
+                <strong className="text-[var(--text-secondary)]">
+                  Can I cancel?
+                </strong>{" "}
+                Anytime, no questions asked. 60-day money-back guarantee.
+              </p>
+            </div>
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <Reveal>
+        <section id="faq" className="max-w-3xl mx-auto px-6 py-20 lg:py-28">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em] text-center">
+            Frequently Asked Questions
+          </h2>
+          <div className="mt-12 border-t border-[var(--border)]">
+            <FaqItem
+              question="What if the AI writes something that upsets my client?"
+              answer="That's why we built Preview Mode. You approve every reminder before it sends. After 5 approvals, you can unlock Autopilot Mode — or stay in Preview forever. You're always in control of every word that goes to your clients."
+            />
+            <FaqItem
+              question="Why not just use Wave for free?"
+              answer="Wave's reminders only work if you accept payments through Wave (2.9% + $0.60 per transaction). On $10k/month invoices, that's $290/month in fees. InvoiceNudge is $19/month flat and works with any payment method — Zelle, Venmo, check, whatever you prefer."
+            />
+            <FaqItem
+              question="How is this different from FreshBooks?"
+              answer="FreshBooks is $19-60/month for invoicing + expenses + time tracking + reminders. Most freelancers only use 2 of those features. InvoiceNudge does one thing — payment reminders — and does it 10X better with AI tone matching that sounds like you, not a template."
+            />
+            <FaqItem
+              question="What if my invoices go to spam?"
+              answer="We use Resend, the same email infrastructure as Linear and Vercel. SPF/DKIM/DMARC are configured automatically for optimal deliverability. If deliverability fails and you're not seeing results, you get a full refund under our 60-day guarantee."
+            />
+            <FaqItem
+              question="Can I use this with my existing invoicing tool?"
+              answer="Yes. Keep using Google Docs, Bonsai, HoneyBook, or whatever you use now. Just forward the invoice email to followup@invoicenudge.com. No complex integration required — it works with any invoicing system."
+            />
+            <FaqItem
+              question="I only have 2-3 late invoices per year. Is this worth it?"
+              answer="Those 2-3 invoices likely equal $5k-10k tied up for 30-60 days. If InvoiceNudge collects even one invoice 14 days faster, you save $50-100 in opportunity cost (credit card float, late fees on your own bills). It pays for itself in month one."
+            />
+            <FaqItem
+              question="When does InvoiceNudge launch?"
+              answer="April 2026. Join the waitlist to be notified first and lock in $19/month founding member pricing. After launch, the Starter plan rises to $29/month for new customers."
+            />
+            <FaqItem
+              question="What's your refund policy?"
+              answer="60-day money-back guarantee, no questions asked. If you don't get paid faster, don't love the AI tone, or just change your mind — email us for a full refund. You keep what you collected, we refund your subscription fees."
+            />
+          </div>
+        </section>
+      </Reveal>
+
+      {/* ── Final CTA ────────────────────────────────────────────────────── */}
+      <Reveal>
+        <section id="waitlist" className="bg-[var(--bg-secondary)] relative">
+          <div className="max-w-2xl mx-auto px-6 py-20 lg:py-28 text-center">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-[-0.02em]">
+              Stop chasing. Start collecting.
+            </h2>
+            <p className="mt-4 text-[var(--text-secondary)] leading-relaxed">
+              Join 500 founding members who&apos;ll never send an awkward
+              payment reminder again. Lock in $19/month forever — before the
+              price rises to $29.
+            </p>
+            <div className="mt-8 flex justify-center">
               <WaitlistForm />
             </div>
-            <p className="mt-6 text-white/50 text-sm">
-              We're building this for people exactly like you.
+            <p className="mt-4 text-xs text-[var(--text-tertiary)]">
+              No spam. Just a launch notification and your founding member spot.
             </p>
-          </Reveal>
-        </div>
-      </section>
+          </div>
+        </section>
+      </Reveal>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-[var(--border)]">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+      {/* ── Footer ───────────────────────────────────────────────────────── */}
+      <footer className="border-t border-[var(--border)]">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
-                <Zap className="w-4 h-4 text-white" />
+              <div
+                className="w-6 h-6 rounded-md flex items-center justify-center"
+                style={{ background: "hsl(var(--accent))" }}
+              >
+                <Send size={12} className="text-white" />
               </div>
-              <span className="font-medium text-stone-800">InvoiceNudge</span>
+              <span className="text-sm text-[var(--text-tertiary)]">
+                InvoiceNudge — AI payment reminders for freelancers
+              </span>
             </div>
-            
-            <nav className="flex items-center gap-8">
-              <a href="#features" className="text-sm text-stone-600 hover:text-stone-900 transition-colors">Features</a>
-              <a href="#pricing" className="text-sm text-stone-600 hover:text-stone-900 transition-colors">Pricing</a>
-              <a href="#faq" className="text-sm text-stone-600 hover:text-stone-900 transition-colors">FAQ</a>
-              <a href="mailto:hello@invoicenudge.com" className="text-sm text-stone-600 hover:text-stone-900 transition-colors">Contact</a>
-            </nav>
-            
-            <div className="flex items-center gap-4">
-              <a href="https://twitter.com/invoicenudge" target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-stone-600 transition-colors">
-                <Twitter className="w-5 h-5" />
+            <div className="flex items-center gap-6 text-sm text-[var(--text-tertiary)]">
+              <a
+                href="#features"
+                className="hover:text-[var(--text-secondary)] transition-colors"
+              >
+                Features
               </a>
-              <a href="https://producthunt.com" target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-stone-600 transition-colors">
-                <ExternalLink className="w-5 h-5" />
+              <a
+                href="#pricing"
+                className="hover:text-[var(--text-secondary)] transition-colors"
+              >
+                Pricing
+              </a>
+              <a
+                href="#faq"
+                className="hover:text-[var(--text-secondary)] transition-colors"
+              >
+                FAQ
+              </a>
+              <a
+                href="/privacy"
+                className="hover:text-[var(--text-secondary)] transition-colors"
+              >
+                Privacy
+              </a>
+              <a
+                href="/terms"
+                className="hover:text-[var(--text-secondary)] transition-colors"
+              >
+                Terms
               </a>
             </div>
           </div>
-          
-          <div className="mt-8 pt-8 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-stone-500">
-              InvoiceNudge helps freelancers get paid on time with AI-powered payment reminders.
-            </p>
-            <div className="flex items-center gap-6">
-              <a href="/privacy" className="text-sm text-stone-500 hover:text-stone-700 transition-colors">Privacy Policy</a>
-              <a href="/terms" className="text-sm text-stone-500 hover:text-stone-700 transition-colors">Terms of Service</a>
-            </div>
-          </div>
-          
-          <div className="mt-8 text-center">
-            <p className="text-sm text-stone-400">© 2026 InvoiceNudge. All rights reserved.</p>
+          <div className="mt-8 pt-6 border-t border-[var(--border)] text-center text-xs text-[var(--text-tertiary)]">
+            © 2026 InvoiceNudge. All rights reserved.
           </div>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }

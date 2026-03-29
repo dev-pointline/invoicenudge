@@ -1,42 +1,91 @@
 import Link from "next/link";
-import { Mail, ArrowLeft } from "lucide-react";
 
-export default function PrivacyPage() {
+export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-stone-50">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-stone-900">
-            <Mail className="w-6 h-6 text-orange-500" />
-            InvoiceNudge
-          </Link>
-        </div>
-      </header>
+    <main className="max-w-3xl mx-auto px-6 py-24">
+      <Link
+        href="/"
+        className="text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] transition-colors"
+      >
+        &larr; Back to home
+      </Link>
+      <h1 className="mt-8 text-3xl font-medium tracking-tight">
+        Privacy Policy
+      </h1>
+      <p className="mt-2 text-sm text-[var(--text-tertiary)]">
+        Last updated: March 29, 2026
+      </p>
 
-      <main className="max-w-4xl mx-auto px-4 py-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-stone-600 hover:text-stone-900 mb-6">
-          <ArrowLeft className="w-4 h-4" />
-          Back to home
-        </Link>
+      <div className="mt-12 space-y-8 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <section>
+          <h2 className="text-lg font-medium text-[var(--text-primary)] mb-3">
+            What We Collect
+          </h2>
+          <p>
+            When you join the InvoiceNudge waitlist, we collect your email
+            address. That&apos;s it. We don&apos;t use tracking cookies,
+            analytics scripts, or third-party data collection tools on this
+            landing page.
+          </p>
+        </section>
 
-        <h1 className="text-3xl font-bold text-stone-900 mb-8">Privacy Policy</h1>
+        <section>
+          <h2 className="text-lg font-medium text-[var(--text-primary)] mb-3">
+            How We Use Your Data
+          </h2>
+          <p>
+            Your email address is used solely to notify you when InvoiceNudge
+            launches and to send occasional product updates (no more than once
+            per month before launch). We will never sell, share, or rent your
+            email address to third parties.
+          </p>
+        </section>
 
-        <div className="prose prose-stone max-w-none">
-          <p className="text-stone-600 mb-6">Last updated: March 2026</p>
+        <section>
+          <h2 className="text-lg font-medium text-[var(--text-primary)] mb-3">
+            Data Storage
+          </h2>
+          <p>
+            Your email is stored securely on our servers using
+            industry-standard encryption. We use reputable infrastructure
+            providers (Vercel, Supabase) that maintain SOC 2 compliance.
+          </p>
+        </section>
 
-          <h2 className="text-xl font-semibold text-stone-900 mt-8 mb-4">Information We Collect</h2>
-          <p className="text-stone-600 mb-4">We collect information you provide directly: email address, name, invoice details (client names, amounts, due dates), and writing samples for tone matching.</p>
+        <section>
+          <h2 className="text-lg font-medium text-[var(--text-primary)] mb-3">
+            Your Rights
+          </h2>
+          <p>
+            You can request deletion of your data at any time by emailing
+            privacy@invoicenudge.com. We will remove your information within 30
+            days of your request. You can also unsubscribe from any email we
+            send using the link in the footer.
+          </p>
+        </section>
 
-          <h2 className="text-xl font-semibold text-stone-900 mt-8 mb-4">How We Use Your Information</h2>
-          <p className="text-stone-600 mb-4">We use your information to provide the InvoiceNudge service: generating reminder emails, scheduling sends, and tracking payment status. We do not sell your data.</p>
+        <section>
+          <h2 className="text-lg font-medium text-[var(--text-primary)] mb-3">
+            Future Product Data
+          </h2>
+          <p>
+            When InvoiceNudge launches, we will process invoice data you
+            forward to us (client name, amount, due date, email content).
+            This data is used solely to provide the reminder service and is
+            never shared with third parties. A complete privacy policy for the
+            product will be provided before launch.
+          </p>
+        </section>
 
-          <h2 className="text-xl font-semibold text-stone-900 mt-8 mb-4">Data Storage</h2>
-          <p className="text-stone-600 mb-4">Your data is stored securely using Supabase (PostgreSQL) with encryption at rest. We retain your data for as long as your account is active.</p>
-
-          <h2 className="text-xl font-semibold text-stone-900 mt-8 mb-4">Contact</h2>
-          <p className="text-stone-600">For privacy questions, email privacy@pointline.dev</p>
-        </div>
-      </main>
-    </div>
+        <section>
+          <h2 className="text-lg font-medium text-[var(--text-primary)] mb-3">
+            Contact
+          </h2>
+          <p>
+            Questions about this policy? Email us at privacy@invoicenudge.com.
+          </p>
+        </section>
+      </div>
+    </main>
   );
 }
