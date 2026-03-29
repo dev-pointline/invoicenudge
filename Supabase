@@ -1,13 +1,23 @@
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-# Polar (Merchant of Record)
-POLAR_ACCESS_TOKEN=polar_at_...
-POLAR_WEBHOOK_SECRET=whsec_...
-NEXT_PUBLIC_POLAR_STARTER_PRODUCT_ID=prod_...
-NEXT_PUBLIC_POLAR_PRO_PRODUCT_ID=prod_...
-NEXT_PUBLIC_POLAR_AGENCY_PRODUCT_ID=prod_...
+# Polar
+POLAR_ACCESS_TOKEN=your_polar_access_token
+POLAR_WEBHOOK_SECRET=your_polar_webhook_secret
+POLAR_ORGANIZATION_ID=your_polar_organization_id
+NEXT_PUBLIC_POLAR_CHECKOUT_LINK_STARTER=https://buy.polar.sh/your-starter-product
+NEXT_PUBLIC_POLAR_CHECKOUT_LINK_PRO=https://buy.polar.sh/your-pro-product
+NEXT_PUBLIC_POLAR_CHECKOUT_LINK_AGENCY=https://buy.polar.sh/your-agency-product
 
-# Site
-NEXT_PUBLIC_SITE_URL=https://invoicenudge.pointline.dev
+# Resend
+RESEND_API_KEY=your_resend_api_key
+
+# Groq
+GROQ_API_KEY=your_groq_api_key
+
+# Cron
+CRON_SECRET=your_cron_secret
+
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
