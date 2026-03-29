@@ -1,12 +1,11 @@
 @import "tailwindcss";
 
-/* ─── Design Tokens ─────────────────────────────────────────────────────── */
 :root {
-  --accent: 25 85% 55%;
-  --accent-light: 25 85% 97%;
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F9FAFB;
-  --bg-tertiary: #F3F4F6;
+  --accent: 24 70% 50%;
+  --accent-light: 24 70% 96%;
+  --bg-primary: #FAFAFA;
+  --bg-secondary: #F3F4F6;
+  --bg-tertiary: #E5E7EB;
   --text-primary: #111827;
   --text-secondary: #374151;
   --text-tertiary: #6B7280;
@@ -15,7 +14,6 @@
   --radius: 12px;
 }
 
-/* ─── Base ───────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -27,13 +25,11 @@ body {
   color: var(--text-primary);
 }
 
-/* ─── Dot Grid Pattern ──────────────────────────────────────────────────── */
 .dot-grid {
   background-image: radial-gradient(circle, var(--border) 0.75px, transparent 0.75px);
   background-size: 24px 24px;
 }
 
-/* ─── Noise Texture Overlay ─────────────────────────────────────────────── */
 .noise::before {
   content: "";
   position: absolute;
@@ -45,7 +41,6 @@ body {
   background-size: 256px 256px;
 }
 
-/* ─── Scroll-Triggered Animations ───────────────────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(16px);
@@ -79,14 +74,11 @@ body {
 .hero-enter-4 { animation-delay: 360ms; opacity: 0; }
 .hero-enter-5 { animation-delay: 480ms; opacity: 0; }
 
-/* ─── Browser Chrome Mockup ─────────────────────────────────────────────── */
 .browser-chrome {
   border-radius: 12px;
   border: 0.5px solid var(--border-subtle);
   background: white;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    0 8px 32px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 
@@ -96,7 +88,7 @@ body {
   gap: 6px;
   padding: 12px 16px;
   border-bottom: 0.5px solid var(--border-subtle);
-  background: var(--bg-secondary);
+  background: #F9FAFB;
 }
 
 .browser-dot {
@@ -110,13 +102,12 @@ body {
   margin-left: 8px;
   padding: 4px 12px;
   border-radius: 6px;
-  background: var(--bg-primary);
+  background: white;
   font-size: 12px;
   color: var(--text-tertiary);
   font-family: var(--font-geist-mono);
 }
 
-/* ─── Accordion ─────────────────────────────────────────────────────────── */
 details summary {
   cursor: pointer;
   list-style: none;
@@ -134,7 +125,6 @@ details[open] summary .faq-chevron {
   transition: transform 0.2s ease;
 }
 
-/* ─── Button Hover ──────────────────────────────────────────────────────── */
 .btn-primary {
   background: hsl(var(--accent));
   color: white;
@@ -151,7 +141,6 @@ details[open] summary .faq-chevron {
   transform: translateY(0);
 }
 
-/* ─── Pricing Highlight ─────────────────────────────────────────────────── */
 .pricing-recommended {
   border-color: hsl(var(--accent) / 0.3);
   background: hsl(var(--accent-light));

@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 
 const TELEMETRY_BASE_URL = process.env.TELEMETRY_BASE_URL || "https://hooks.pointline.dev";
-const TELEMETRY_TOKEN = process.env.TELEMETRY_TOKEN || "invoicenudge-waitlist-2026";
+const TELEMETRY_TOKEN = process.env.TELEMETRY_TOKEN || "invoicenudge_waitlist_2026";
 
 export async function POST(req: Request) {
   try {
-    const { email, name } = await req.json();
+    const { email } = await req.json();
     
-    // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "Valid email required" }, { status: 400 });
     }
@@ -19,24 +18,17 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         telemetryToken: TELEMETRY_TOKEN,
         eventType: "waitlist_signup",
-        metadata: { 
-          email, 
-          name: name || null, 
-          source: "landing_page",
-          timestamp: new Date().toISOString(),
-        },
+        metadata: { email, source: "landing_page", product: "invoicenudge" },
       }),
-    }).catch(() => null); // non-blocking
+    }).catch(() => null);
 
-    // Log to server console as backup
-    console.log(`[WAITLIST] New signup: ${email} at ${new Date().toISOString()}`);
+    console.log(`[InvoiceNudge] Waitlist signup: ${email}`);
 
     return NextResponse.json({ 
       success: true, 
       message: "You're on the waitlist! We'll notify you when we launch." 
     });
-  } catch (error) {
-    console.error("[WAITLIST] Error:", error);
+  } catch {
     return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
   }
 }
