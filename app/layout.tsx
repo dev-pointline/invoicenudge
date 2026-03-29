@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "InvoiceNudge — Never Chase Late Payments Again",
     description: "Forward your invoice. AI sends polite reminders that sound like you — not a robot. Get paid faster without the awkward follow-ups.",
     type: "website",
-    url: "https://invoicenudge.com",
+    url: "https://invoicenudge.pointline.dev",
   },
   twitter: { 
     card: "summary_large_image",
@@ -33,49 +33,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Organization",
+              "@type": "SoftwareApplication",
               name: "InvoiceNudge",
               description: "Automated payment reminders for freelancers",
-              url: "https://invoicenudge.com",
+              url: "https://invoicenudge.pointline.dev",
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "Offer",
+                price: "19",
+                priceCurrency: "USD",
+              },
             }),
           }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "When does InvoiceNudge launch?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "We're targeting Q2 2026. Join the waitlist to be notified and lock in founding member pricing."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "How is this different from FreshBooks reminders?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "FreshBooks bundles reminders with accounting features you may not need. We do one thing exceptionally: AI reminders that sound like you."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "Will my clients know it's automated?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "No. Emails come from your email address via Resend's infrastructure. Clients see your email address — no InvoiceNudge branding."
-                  }
-                }
-              ]
-            }),
-          }}
-        />
-              <script defer src="/pipeline-telemetry.js" data-telemetry-token="8059eb08-11de-406a-a183-5918e76fc404" data-telemetry-base-url="https://hooks.pointline.dev"></script>
+              <script defer src="/pipeline-telemetry.js" data-telemetry-token="1fae395f-215b-47d8-9487-7f446aba6d13" data-telemetry-base-url="https://hooks.pointline.dev"></script>
       </body>
     </html>
   );

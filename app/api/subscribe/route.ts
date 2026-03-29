@@ -1,41 +1,55 @@
 import { NextResponse } from "next/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
-const TELEMETRY_BASE_URL = process.env.TELEMETRY_BASE_URL || "https://hooks.pointline.dev";
-const TELEMETRY_TOKEN = process.env.TELEMETRY_TOKEN || "invoicenudge_waitlist_2026";
-
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const { email } = await req.json();
-    
-    // Validate email format
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json({ error: "Valid email required" }, { status: 400 });
+    const { email } = await request.json();
+
+    if (!email || typeof email !== "string") {
+      return NextResponse.json(
+        { error: "Email is required" },
+        { status: 400 }
+      );
     }
 
-    // Store signup via telemetry endpoint
-    await fetch(`${TELEMETRY_BASE_URL}/api/telemetry/event`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        telemetryToken: TELEMETRY_TOKEN,
-        eventType: "waitlist_signup",
-        metadata: { 
-          email, 
-          source: "landing_page",
-          product: "invoicenudge",
-          timestamp: new Date().toISOString()
-        },
-      }),
-    }).catch(() => null); // Non-blocking
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
 
-    console.log(`[InvoiceNudge] Waitlist signup: ${email}`);
+    // Insert into waitlist
+    const { error } = await supabaseAdmin
+      .from("waitlist")
+      .insert({ email: email.toLowerCase().trim(), source: "landing_page" });
 
-    return NextResponse.json({ 
-      success: true, 
-      message: "You're on the waitlist! We'll notify you when we launch." 
-    });
-  } catch (error) {
-    console.error("[InvoiceNudge] Signup error:", error);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    if (error) {
+      // Check for duplicate
+      if (error.code === "23505") {
+        return NextResponse.json(
+          { message: "You're already on the waitlist!" },
+          { status: 200 }
+        );
+      }
+      console.error("Waitlist insert error:", error);
+      return NextResponse.json(
+        { error: "Failed to join waitlist" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Successfully joined the waitlist!" },
+      { status: 200 }
+    );
+  } catch (err) {
+    console.error("Subscribe error:", err);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
