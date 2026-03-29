@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
+/* ─── Design Tokens ─────────────────────────────────────────────────────── */
 :root {
-  --accent: 24 70% 50%;
-  --accent-light: 24 70% 96%;
+  --accent: 25 85% 55%;
+  --accent-light: 25 85% 97%;
   --bg-primary: #FFFFFF;
   --bg-secondary: #F9FAFB;
   --bg-tertiary: #F3F4F6;
@@ -14,6 +15,7 @@
   --radius: 12px;
 }
 
+/* ─── Base ───────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -25,11 +27,25 @@ body {
   color: var(--text-primary);
 }
 
+/* ─── Dot Grid Pattern ──────────────────────────────────────────────────── */
 .dot-grid {
   background-image: radial-gradient(circle, var(--border) 0.75px, transparent 0.75px);
   background-size: 24px 24px;
 }
 
+/* ─── Noise Texture Overlay ─────────────────────────────────────────────── */
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* ─── Scroll-Triggered Animations ───────────────────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(16px);
@@ -63,11 +79,14 @@ body {
 .hero-enter-4 { animation-delay: 360ms; opacity: 0; }
 .hero-enter-5 { animation-delay: 480ms; opacity: 0; }
 
+/* ─── Browser Chrome Mockup ─────────────────────────────────────────────── */
 .browser-chrome {
   border-radius: 12px;
   border: 0.5px solid var(--border-subtle);
   background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 8px 32px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 
@@ -94,8 +113,10 @@ body {
   background: var(--bg-primary);
   font-size: 12px;
   color: var(--text-tertiary);
+  font-family: var(--font-geist-mono);
 }
 
+/* ─── Accordion ─────────────────────────────────────────────────────────── */
 details summary {
   cursor: pointer;
   list-style: none;
@@ -113,6 +134,7 @@ details[open] summary .faq-chevron {
   transition: transform 0.2s ease;
 }
 
+/* ─── Button Hover ──────────────────────────────────────────────────────── */
 .btn-primary {
   background: hsl(var(--accent));
   color: white;
@@ -129,60 +151,8 @@ details[open] summary .faq-chevron {
   transform: translateY(0);
 }
 
-.btn-secondary {
-  background: white;
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-  transition: all 0.15s ease;
-}
-
-.btn-secondary:hover {
-  background: var(--bg-secondary);
-  border-color: var(--text-tertiary);
-}
-
+/* ─── Pricing Highlight ─────────────────────────────────────────────────── */
 .pricing-recommended {
   border-color: hsl(var(--accent) / 0.3);
   background: hsl(var(--accent-light));
-}
-
-@keyframes gentle-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--accent) / 0.3); }
-  50% { box-shadow: 0 0 0 6px hsl(var(--accent) / 0); }
-}
-
-.pulse-glow {
-  animation: gentle-pulse 2s ease-in-out infinite;
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border);
-  background: white;
-  font-size: 0.875rem;
-  transition: all 0.15s ease;
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: hsl(var(--accent) / 0.5);
-  box-shadow: 0 0 0 3px hsl(var(--accent) / 0.1);
-}
-
-.input-field::placeholder {
-  color: var(--text-tertiary);
-}
-
-.card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-}
-
-.card-hover:hover {
-  border-color: hsl(var(--accent) / 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }

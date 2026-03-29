@@ -4,50 +4,71 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "InvoiceNudge — Automated Payment Reminders That Sound Like You",
-  description: "Stop chasing late payments. Forward your invoice, AI sends polite reminders matching your tone. Built for freelancers who hate awkward follow-ups.",
+  title: "InvoiceNudge — AI Payment Reminders for Freelancers",
+  description: "Stop chasing late payments. InvoiceNudge sends AI-powered payment reminders that sound like you — not a robot. Built for freelancers who invoice clients.",
   openGraph: {
-    title: "InvoiceNudge — Never Chase Late Payments Again",
-    description: "Forward your invoice. AI sends polite reminders that sound like you — not a robot. Get paid faster without the awkward follow-ups.",
+    title: "InvoiceNudge — Stop Chasing Clients. Start Getting Paid.",
+    description: "Forward your invoices. AI sends polite reminders. You focus on the work. Built for freelancers who are tired of awkward payment follow-ups.",
     type: "website",
-    url: "https://invoicenudge.pointline.dev",
   },
-  twitter: { 
-    card: "summary_large_image",
-    title: "InvoiceNudge — Automated Payment Reminders",
-    description: "Stop chasing late payments. AI reminders that sound like you.",
-  },
-  keywords: ["invoice reminders", "payment follow-up", "freelancer tools", "late payment automation", "accounts receivable"],
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
-      <body className={`${GeistSans.className} antialiased`}>
-        {children}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
+              "@type": "Organization",
               name: "InvoiceNudge",
-              description: "Automated payment reminders for freelancers",
-              url: "https://invoicenudge.pointline.dev",
-              applicationCategory: "BusinessApplication",
-              operatingSystem: "Web",
-              offers: {
-                "@type": "Offer",
-                price: "19",
-                priceCurrency: "USD",
-              },
+              description: "AI-powered payment reminders for freelancers",
+              url: "https://invoicenudge.com",
             }),
           }}
         />
-              <script defer src="/pipeline-telemetry.js" data-telemetry-token="1fae395f-215b-47d8-9487-7f446aba6d13" data-telemetry-base-url="https://hooks.pointline.dev"></script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "When does InvoiceNudge launch?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "We're launching in April 2026. Join the waitlist to be notified first.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Will my clients know I'm using AI?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "No. Emails come from your email address. Clients see you, not InvoiceNudge.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Does this work with my invoicing software?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Yes — InvoiceNudge is invoice-agnostic. Forward invoices from FreshBooks, Wave, Bonsai, QuickBooks, or any PDF.",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
+      <body className={`${GeistSans.className} antialiased`}>
+        {children}
+              <script defer src="/pipeline-telemetry.js" data-telemetry-token="0d76e7d1-512b-401f-a077-552397cb3f7d" data-telemetry-base-url="https://hooks.pointline.dev"></script>
       </body>
     </html>
   );
