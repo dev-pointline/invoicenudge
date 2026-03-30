@@ -1,23 +1,20 @@
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-# Polar
-POLAR_ACCESS_TOKEN=your_polar_access_token
-POLAR_WEBHOOK_SECRET=your_polar_webhook_secret
-POLAR_ORGANIZATION_ID=your_polar_organization_id
-NEXT_PUBLIC_POLAR_CHECKOUT_LINK_STARTER=https://buy.polar.sh/your-starter-product
-NEXT_PUBLIC_POLAR_CHECKOUT_LINK_PRO=https://buy.polar.sh/your-pro-product
-NEXT_PUBLIC_POLAR_CHECKOUT_LINK_AGENCY=https://buy.polar.sh/your-agency-product
+# Resend (Email)
+RESEND_API_KEY=re_your-api-key
+RESEND_WEBHOOK_SECRET=whsec_your-webhook-secret
 
-# Resend
-RESEND_API_KEY=your_resend_api_key
+# Groq (AI)
+GROQ_API_KEY=gsk_your-api-key
 
-# Groq
-GROQ_API_KEY=your_groq_api_key
+# Polar (Payments)
+POLAR_ACCESS_TOKEN=polar_your-access-token
+POLAR_WEBHOOK_SECRET=your-polar-webhook-secret
+NEXT_PUBLIC_POLAR_CHECKOUT_LINK_STARTER=https://checkout.polar.sh/starter
+NEXT_PUBLIC_POLAR_CHECKOUT_LINK_PRO=https://checkout.polar.sh/pro
+NEXT_PUBLIC_POLAR_CHECKOUT_LINK_AGENCY=https://checkout.polar.sh/agency
 
-# Cron
-CRON_SECRET=your_cron_secret
-
-# App
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+# Cron Security
+CRON_SECRET=your-cron-secret-here
