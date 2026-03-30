@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
-/* ─── Design Tokens — Warm Amber Accent ─────────────────────────────────── */
+/* ─── Design Tokens ─────────────────────────────────────────────────────── */
 :root {
-  --accent: 38 92% 50%;
-  --accent-light: 38 92% 96%;
-  --bg-primary: #FAFAFA;
-  --bg-secondary: #F5F5F4;
-  --bg-tertiary: #E7E5E4;
-  --text-primary: #1C1917;
-  --text-secondary: #44403C;
-  --text-tertiary: #78716C;
-  --border: #D6D3D1;
-  --border-subtle: rgba(214, 211, 209, 0.6);
+  --accent: 24 70% 50%;
+  --accent-light: 24 70% 96%;
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
+  --bg-tertiary: #F3F4F6;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-tertiary: #6B7280;
+  --border: #E5E7EB;
+  --border-subtle: rgba(229, 231, 235, 0.6);
   --radius: 12px;
 }
 
@@ -38,7 +38,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.025;
+  opacity: 0.03;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
@@ -136,19 +136,6 @@ details[open] summary .faq-chevron {
   transition: transform 0.2s ease;
 }
 
-/* ─── Subtle Glow (accent-colored) ──────────────────────────────────────── */
-.accent-glow {
-  box-shadow:
-    0 0 0 1px hsl(var(--accent) / 0.15),
-    0 1px 2px hsl(var(--accent) / 0.1);
-}
-
-.accent-glow:hover {
-  box-shadow:
-    0 0 0 1px hsl(var(--accent) / 0.25),
-    0 2px 8px hsl(var(--accent) / 0.15);
-}
-
 /* ─── Button Hover ──────────────────────────────────────────────────────── */
 .btn-primary {
   background: hsl(var(--accent));
@@ -172,26 +159,36 @@ details[open] summary .faq-chevron {
   background: hsl(var(--accent-light));
 }
 
-/* ─── Mobile Nav ────────────────────────────────────────────────────────── */
-.mobile-menu {
+/* ─── Timeline ──────────────────────────────────────────────────────────── */
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: hsl(var(--accent));
+  position: relative;
+}
+
+.timeline-dot::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 2px;
+  height: 32px;
+  background: var(--border);
+  transform: translateX(-50%);
+}
+
+.timeline-dot:last-child::after {
   display: none;
 }
 
-.mobile-menu.open {
-  display: flex;
+/* ─── Invoice Card Animation ────────────────────────────────────────────── */
+@keyframes pulse-gentle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
-/* ─── Sticky Mobile CTA ─────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .sticky-mobile-cta {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 12px 16px;
-    background: var(--bg-primary);
-    border-top: 1px solid var(--border);
-    z-index: 50;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
-  }
+.pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
 }

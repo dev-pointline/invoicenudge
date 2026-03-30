@@ -5,14 +5,14 @@ const TELEMETRY_TOKEN = process.env.TELEMETRY_TOKEN || "invoicenudge-waitlist-20
 
 export async function POST(req: Request) {
   try {
-    const { email, name } = await req.json();
+    const { email } = await req.json();
     
     // Validate email format
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "Valid email required" }, { status: 400 });
     }
 
-    // Store signup via telemetry endpoint
+    // Store signup via telemetry endpoint (non-blocking)
     await fetch(`${TELEMETRY_BASE_URL}/api/telemetry/event`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -21,20 +21,19 @@ export async function POST(req: Request) {
         eventType: "waitlist_signup",
         metadata: { 
           email, 
-          name: name || null, 
           source: "landing_page",
           product: "invoicenudge",
           timestamp: new Date().toISOString(),
         },
       }),
-    }).catch(() => null); // Non-blocking
+    }).catch(() => null); // Non-blocking — don't fail the request if telemetry fails
 
-    // Log for debugging (server-side only)
+    // Log to server console for debugging
     console.log(`[InvoiceNudge Waitlist] New signup: ${email}`);
 
     return NextResponse.json({ 
       success: true, 
-      message: "You're on the waitlist! We'll notify you when we launch." 
+      message: "You're on the waitlist! We'll notify you when we launch on April 15, 2026." 
     });
   } catch (error) {
     console.error("[InvoiceNudge Waitlist] Error:", error);
