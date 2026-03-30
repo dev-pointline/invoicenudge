@@ -1,96 +1,82 @@
-import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { NextRequest, NextResponse } from "next/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import {
+  verifyPolarWebhook,
+  parseWebhookEvent,
+} from "@/lib/polar/webhooks";
 
-export async function POST(request: Request) {
+const TIER_MAP: Record<string, string> = {
+  "InvoiceNudge Starter": "starter",
+  "InvoiceNudge Pro": "pro",
+  "InvoiceNudge Agency": "agency",
+};
+
+export async function POST(request: NextRequest) {
   try {
-    const rawBody = await request.text();
-    const signature = request.headers.get("webhook-signature") || "";
+    const payload = await request.text();
+    const signature = request.headers.get("polar-signature") ?? "";
 
-    // In production, verify signature using POLAR_WEBHOOK_SECRET
-    // For MVP, we'll parse and handle directly
-    
-    let event;
-    try {
-      event = JSON.parse(rawBody);
-    } catch {
-      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    if (!verifyPolarWebhook(payload, signature, process.env.POLAR_WEBHOOK_SECRET!)) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    const eventType = event.type;
-
-    switch (eventType) {
-      case "order.paid": {
-        const customerEmail = event.data?.customer_email;
-        const productId = event.data?.product_id;
-        const polarCustomerId = event.data?.customer_id;
-
-        if (!customerEmail) {
-          console.error("No customer email in order.paid event");
-          break;
-        }
-
-        // Determine plan from product ID
-        let plan = "starter";
-        const starterProductId = process.env.NEXT_PUBLIC_POLAR_STARTER_PRODUCT_ID;
-        const proProductId = process.env.NEXT_PUBLIC_POLAR_PRO_PRODUCT_ID;
-        const agencyProductId = process.env.NEXT_PUBLIC_POLAR_AGENCY_PRODUCT_ID;
-
-        if (productId === proProductId) {
-          plan = "pro";
-        } else if (productId === agencyProductId) {
-          plan = "agency";
-        }
-
-        // Update user profile with plan
-        const { error } = await supabaseAdmin
-          .from("profiles")
-          .update({ 
-            plan, 
-            polar_customer_id: polarCustomerId,
-            updated_at: new Date().toISOString()
-          })
-          .eq("email", customerEmail.toLowerCase());
-
-        if (error) {
-          console.error("Failed to update profile:", error);
-        } else {
-          console.log(`User ${customerEmail} upgraded to ${plan}`);
-        }
-        break;
-      }
-
-      case "subscription.created": {
-        console.log("Subscription created:", event.data);
-        break;
-      }
-
-      case "subscription.updated": {
-        console.log("Subscription updated:", event.data);
-        break;
-      }
-
-      case "subscription.canceled": {
-        const customerEmail = event.data?.customer_email;
-        if (customerEmail) {
-          // Downgrade to free plan
-          await supabaseAdmin
-            .from("profiles")
-            .update({ plan: "free", updated_at: new Date().toISOString() })
-            .eq("email", customerEmail.toLowerCase());
-          console.log(`User ${customerEmail} downgraded to free`);
-        }
-        break;
-      }
-
-      default:
-        console.log("Unhandled event type:", eventType);
+    const event = parseWebhookEvent(payload);
+    if (!event) {
+      return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
     }
 
-    return NextResponse.json({ received: true }, { status: 200 });
-  } catch (err) {
-    console.error("Webhook error:", err);
+    const admin = createAdminClient();
+
+    // Get user by email
+    const customerEmail = event.data.customer?.email;
+    if (!customerEmail) {
+      return NextResponse.json({ received: true });
+    }
+
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("id")
+      .eq("email", customerEmail)
+      .single();
+
+    if (!profile) {
+      console.log("No profile found for email:", customerEmail);
+      return NextResponse.json({ received: true });
+    }
+
+    const tier = TIER_MAP[event.data.product.name] ?? "free";
+
+    if (
+      event.type === "subscription.created" ||
+      event.type === "subscription.updated"
+    ) {
+      await admin.from("subscriptions").upsert(
+        {
+          user_id: profile.id,
+          polar_subscription_id: event.data.id,
+          polar_customer_id: event.data.customer_id,
+          tier,
+          status: event.data.status === "active" ? "active" : "canceled",
+          current_period_end: event.data.current_period_end ?? null,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "user_id" }
+      );
+    } else if (event.type === "subscription.canceled") {
+      await admin
+        .from("subscriptions")
+        .update({
+          status: "canceled",
+          updated_at: new Date().toISOString(),
+        })
+        .eq("polar_subscription_id", event.data.id);
+    }
+
+    return NextResponse.json({ received: true });
+  } catch (error) {
+    console.error("Polar webhook error:", error);
     return NextResponse.json(
-      { error: "Webhook handler failed" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
