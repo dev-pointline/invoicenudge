@@ -1,19 +1,21 @@
 @import "tailwindcss";
 
+/* ─── Design Tokens — Warm Amber Accent ─────────────────────────────────── */
 :root {
-  --accent: 24 70% 50%;
-  --accent-light: 24 70% 96%;
+  --accent: 38 92% 50%;
+  --accent-light: 38 92% 96%;
   --bg-primary: #FAFAFA;
-  --bg-secondary: #F3F4F6;
-  --bg-tertiary: #E5E7EB;
-  --text-primary: #111827;
-  --text-secondary: #374151;
-  --text-tertiary: #6B7280;
-  --border: #E5E7EB;
-  --border-subtle: rgba(229, 231, 235, 0.6);
+  --bg-secondary: #F5F5F4;
+  --bg-tertiary: #E7E5E4;
+  --text-primary: #1C1917;
+  --text-secondary: #44403C;
+  --text-tertiary: #78716C;
+  --border: #D6D3D1;
+  --border-subtle: rgba(214, 211, 209, 0.6);
   --radius: 12px;
 }
 
+/* ─── Base ───────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -25,22 +27,25 @@ body {
   color: var(--text-primary);
 }
 
+/* ─── Dot Grid Pattern ──────────────────────────────────────────────────── */
 .dot-grid {
   background-image: radial-gradient(circle, var(--border) 0.75px, transparent 0.75px);
   background-size: 24px 24px;
 }
 
+/* ─── Noise Texture Overlay ─────────────────────────────────────────────── */
 .noise::before {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.03;
+  opacity: 0.025;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
 }
 
+/* ─── Scroll-Triggered Animations ───────────────────────────────────────── */
 .reveal {
   opacity: 0;
   transform: translateY(16px);
@@ -52,6 +57,7 @@ body {
   transform: translateY(0);
 }
 
+/* Staggered children */
 .stagger > .reveal:nth-child(1) { transition-delay: 0ms; }
 .stagger > .reveal:nth-child(2) { transition-delay: 80ms; }
 .stagger > .reveal:nth-child(3) { transition-delay: 160ms; }
@@ -59,6 +65,7 @@ body {
 .stagger > .reveal:nth-child(5) { transition-delay: 320ms; }
 .stagger > .reveal:nth-child(6) { transition-delay: 400ms; }
 
+/* Hero entrance */
 @keyframes hero-fade {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -74,11 +81,14 @@ body {
 .hero-enter-4 { animation-delay: 360ms; opacity: 0; }
 .hero-enter-5 { animation-delay: 480ms; opacity: 0; }
 
+/* ─── Browser Chrome Mockup ─────────────────────────────────────────────── */
 .browser-chrome {
   border-radius: 12px;
   border: 0.5px solid var(--border-subtle);
   background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 8px 32px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
 
@@ -88,7 +98,7 @@ body {
   gap: 6px;
   padding: 12px 16px;
   border-bottom: 0.5px solid var(--border-subtle);
-  background: #F9FAFB;
+  background: var(--bg-secondary);
 }
 
 .browser-dot {
@@ -102,12 +112,13 @@ body {
   margin-left: 8px;
   padding: 4px 12px;
   border-radius: 6px;
-  background: white;
+  background: var(--bg-primary);
   font-size: 12px;
   color: var(--text-tertiary);
   font-family: var(--font-geist-mono);
 }
 
+/* ─── Accordion ─────────────────────────────────────────────────────────── */
 details summary {
   cursor: pointer;
   list-style: none;
@@ -125,6 +136,20 @@ details[open] summary .faq-chevron {
   transition: transform 0.2s ease;
 }
 
+/* ─── Subtle Glow (accent-colored) ──────────────────────────────────────── */
+.accent-glow {
+  box-shadow:
+    0 0 0 1px hsl(var(--accent) / 0.15),
+    0 1px 2px hsl(var(--accent) / 0.1);
+}
+
+.accent-glow:hover {
+  box-shadow:
+    0 0 0 1px hsl(var(--accent) / 0.25),
+    0 2px 8px hsl(var(--accent) / 0.15);
+}
+
+/* ─── Button Hover ──────────────────────────────────────────────────────── */
 .btn-primary {
   background: hsl(var(--accent));
   color: white;
@@ -141,7 +166,32 @@ details[open] summary .faq-chevron {
   transform: translateY(0);
 }
 
+/* ─── Pricing Highlight ─────────────────────────────────────────────────── */
 .pricing-recommended {
   border-color: hsl(var(--accent) / 0.3);
   background: hsl(var(--accent-light));
+}
+
+/* ─── Mobile Nav ────────────────────────────────────────────────────────── */
+.mobile-menu {
+  display: none;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+/* ─── Sticky Mobile CTA ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .sticky-mobile-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 12px 16px;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    z-index: 50;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+  }
 }

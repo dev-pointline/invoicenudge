@@ -5,45 +5,20 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "InvoiceNudge — Stop Chasing Late Payments",
-  description: "AI-powered payment reminders that sound like you, not a robot. Forward your invoice, get paid 14 days faster. Built for freelancers who hate awkward follow-ups.",
+  description: "Forward your invoice. We send polite AI-powered reminders that sound like you. Freelancers get paid on time without awkward follow-ups.",
   openGraph: {
     title: "InvoiceNudge — Stop Chasing Late Payments",
-    description: "AI-powered payment reminders that sound like you, not a robot. Get paid 14 days faster without the awkward follow-ups.",
+    description: "AI-powered payment reminders for freelancers. Forward your invoice, we handle the follow-ups.",
     type: "website",
     url: "https://invoicenudge.com",
   },
-  twitter: { card: "summary_large_image" },
-  keywords: ["invoice reminders", "freelancer payments", "late payment automation", "AI invoice follow-up", "get paid faster"],
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "InvoiceNudge",
-  description: "AI-powered payment reminder automation for freelancers",
-  url: "https://invoicenudge.com",
-};
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "When does InvoiceNudge launch?",
-      acceptedAnswer: { "@type": "Answer", text: "April 2026. Join the waitlist to lock in founding member pricing." }
-    },
-    {
-      "@type": "Question",
-      name: "Will there be a free trial?",
-      acceptedAnswer: { "@type": "Answer", text: "Yes — 7-day free trial, no credit card required." }
-    },
-    {
-      "@type": "Question",
-      name: "What if the AI says something embarrassing?",
-      acceptedAnswer: { "@type": "Answer", text: "Preview Mode lets you approve every email before it sends. You're always in control." }
-    },
-  ],
+  twitter: { 
+    card: "summary_large_image",
+    title: "InvoiceNudge — Stop Chasing Late Payments",
+    description: "AI-powered payment reminders for freelancers. Forward your invoice, we handle the follow-ups.",
+  },
+  keywords: ["invoice reminders", "freelancer payments", "payment follow-up", "late payment automation", "AI invoice assistant"],
+  robots: "index, follow",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -53,16 +28,56 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "InvoiceNudge",
+              url: "https://invoicenudge.com",
+              description: "AI-powered payment reminders for freelancers",
+              foundingDate: "2026",
+            }),
+          }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: "What if AI writes something that offends my client?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Preview Mode shows you every email before it sends. Approve, edit, or reject. You stay in full control.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "Why not just use Wave or FreshBooks?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Those require using their payment processing or full accounting suite. InvoiceNudge works with ANY invoice, ANY payment method — just forward the email.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "When does InvoiceNudge launch?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "April 2026. Join the waitlist for early access and founding member pricing.",
+                  },
+                },
+              ],
+            }),
+          }}
         />
       </head>
       <body className={`${GeistSans.className} antialiased`}>
         {children}
-              <script defer src="/pipeline-telemetry.js" data-telemetry-token="7307a8b2-9f70-4af2-b526-6bdd581476af" data-telemetry-base-url="https://hooks.pointline.dev"></script>
+              <script defer src="/pipeline-telemetry.js" data-telemetry-token="1a965a7d-ab3b-44f5-814d-00fa213c2dc2" data-telemetry-base-url="https://hooks.pointline.dev"></script>
       </body>
     </html>
   );
