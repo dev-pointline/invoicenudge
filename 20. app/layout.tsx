@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={GeistSans.variable}>
-      <body className={GeistSans.className}>{children}        <script defer src="/pipeline-telemetry.js" data-telemetry-token="b4610db6-a552-4bc1-b771-c6a29a95193a" data-telemetry-base-url="https://hooks.pointline.dev"></script>
+      <body className={GeistSans.className}>{children}        <script defer src="/pipeline-telemetry.js" data-telemetry-token="5cd1dbf8-266d-473f-878f-03465b67401b" data-telemetry-base-url="https://hooks.pointline.dev"></script>
       </body>
     </html>
   );
